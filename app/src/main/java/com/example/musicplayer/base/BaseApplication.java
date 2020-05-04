@@ -2,6 +2,7 @@ package com.example.musicplayer.base;
 
 import android.app.Application;
 
+import com.example.musicplayer.utils.LogUtil;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 
@@ -22,5 +23,9 @@ public class BaseApplication extends Application {
             mXimalaya.setPackid("com.ximalaya.qunfeng");
             mXimalaya.init(this ,mAppSecret);
         }
+        // 初始化LogUtil类
+        LogUtil.init(this.getPackageName(), false);
     }
+
+
 }
