@@ -20,7 +20,6 @@ public class IndicatorAdapter extends CommonNavigatorAdapter {
     private final  String[] titles;
     public IndicatorAdapter(Context context){
         titles=context.getResources().getStringArray(R.array.indicator_name);
-
     }
     @Override
     public int getCount(){
@@ -31,25 +30,29 @@ public class IndicatorAdapter extends CommonNavigatorAdapter {
     }
 
     @Override
-    public IPagerTitleView getTitleView(Context context, int i){
-        SimplePagerTitleView simplePagerTitleView = new ColorTransitionPagerTitleView(context);
-        simplePagerTitleView.setNormalColor(Color.GRAY);
-        simplePagerTitleView.setSelectedColor(Color.WHITE);
-        simplePagerTitleView.setText(titles[i]);
-        simplePagerTitleView.setOnClickListener(new View.OnClickListener() {
+    public IPagerTitleView getTitleView(Context context, final int index){
+        //创建view
+        ColorTransitionPagerTitleView colorTransitionPagerTitleView = new ColorTransitionPagerTitleView(context);
+        colorTransitionPagerTitleView.setNormalColor(Color.parseColor("#aaffffff"));
+        colorTransitionPagerTitleView.setSelectedColor(Color.parseColor("#ffffff"));
+        colorTransitionPagerTitleView.setTextSize(18);
+        //设置要显示的内容
+        colorTransitionPagerTitleView.setText(titles[index]);
+        colorTransitionPagerTitleView.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
-                // viewPager.setCurrentItem(i);
+            public void onClick(View view){
+                // 切换View
+                // TODO
             }
         });
-        return simplePagerTitleView;
+        return colorTransitionPagerTitleView;
     }
 
     @Override
     public IPagerIndicator getIndicator(Context context ){
         LinePagerIndicator linePagerIndicator = new LinePagerIndicator(context);
         linePagerIndicator.setMode(LinePagerIndicator.MODE_WRAP_CONTENT);
-        linePagerIndicator.setColors(Color.WHITE);
+        linePagerIndicator.setColors(Color.parseColor("#ffffff"));
         return linePagerIndicator;
     }
 

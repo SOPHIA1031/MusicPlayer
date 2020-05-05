@@ -2,6 +2,8 @@ package com.example.musicplayer;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
 import android.graphics.Color;
@@ -14,6 +16,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.example.musicplayer.adapters.IndicatorAdapter;
+import com.example.musicplayer.adapters.MainContentAdapter;
 import com.example.musicplayer.utils.LogUtil;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
@@ -24,7 +27,7 @@ import net.lucode.hackware.magicindicator.ViewPagerHelper;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends FragmentActivity {
 
     private static final String TAG="MainActivity";
     @Override
@@ -45,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
         // 设置要显示的内容
         //ViewPager
         ViewPager contentPager =this.findViewById(R.id.content_pager);
+        //创建内容适配器
+        FragmentManager supportFragmentManager=getSupportFragmentManager();
+        MainContentAdapter mainContentAdapter = new MainContentAdapter(supportFragmentManager);
+        contentPager.setAdapter(mainContentAdapter);
         // 绑定
         magicIndicator.setNavigator(commonNavigator);
         ViewPagerHelper.bind(magicIndicator, contentPager);
