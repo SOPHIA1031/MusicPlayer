@@ -30,30 +30,44 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNav
 public class MainActivity extends FragmentActivity {
 
     private static final String TAG="MainActivity";
+    private IndicatorAdapter mIndicatorAdapter;
+    private ViewPager mContentPager;
+    private MagicIndicator mMagicIndicator;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
+        initEvent();
     }
-
+    private  void initEvent(){
+        mIndicatorAdapter.setOnIndicatorTapClickListener(new IndicatorAdapter.OnIndicatorTapClickListener() {
+            @Override
+            public void onTabClick(int index) {
+                LogUtil.d(TAG,"click index is"+index);
+                if (mContentPager!=null){
+                    mContentPager.setCurrentItem(index);
+                }
+            }
+        });
+    }
     private void initView(){
-        MagicIndicator magicIndicator = this.findViewById(R.id.main_indicator);
-        magicIndicator.setBackgroundColor(this.getResources().getColor(R.color.main_color));
+        mMagicIndicator = this.findViewById(R.id.main_indicator);
+        mMagicIndicator.setBackgroundColor(this.getResources().getColor(R.color.main_color));
 
         //创建indicator的适配器
-        IndicatorAdapter adapter = new IndicatorAdapter(this);
+        mIndicatorAdapter = new IndicatorAdapter(this);
         CommonNavigator commonNavigator = new CommonNavigator(this);
-        commonNavigator.setAdapter(adapter);
+        commonNavigator.setAdjustMode(true); //自适应宽度，三栏平分
+        commonNavigator.setAdapter(mIndicatorAdapter);
         // 设置要显示的内容
-        //ViewPager
-        ViewPager contentPager =this.findViewById(R.id.content_pager);
+        mContentPager =this.findViewById(R.id.content_pager);
         //创建内容适配器
         FragmentManager supportFragmentManager=getSupportFragmentManager();
         MainContentAdapter mainContentAdapter = new MainContentAdapter(supportFragmentManager);
-        contentPager.setAdapter(mainContentAdapter);
+        mContentPager.setAdapter(mainContentAdapter);
         // 绑定
-        magicIndicator.setNavigator(commonNavigator);
-        ViewPagerHelper.bind(magicIndicator, contentPager);
+        mMagicIndicator.setNavigator(commonNavigator);
+        ViewPagerHelper.bind(mMagicIndicator, mContentPager);// viewpager有滑动监听，下面的页面滑动上面的也跟着滑动
     }
 }

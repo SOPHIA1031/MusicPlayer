@@ -18,6 +18,7 @@ import java.util.List;
 public class IndicatorAdapter extends CommonNavigatorAdapter {
 
     private final  String[] titles;
+    private OnIndicatorTapClickListener mOnTabClickListener;
     public IndicatorAdapter(Context context){
         titles=context.getResources().getStringArray(R.array.indicator_name);
     }
@@ -41,8 +42,10 @@ public class IndicatorAdapter extends CommonNavigatorAdapter {
         colorTransitionPagerTitleView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                // 切换View
-                // TODO
+                // 根据index 切换ViewPagen
+                if(mOnTabClickListener!=null){
+                    mOnTabClickListener.onTabClick(index); //调用MianActivity中的方法
+                }
             }
         });
         return colorTransitionPagerTitleView;
@@ -56,4 +59,11 @@ public class IndicatorAdapter extends CommonNavigatorAdapter {
         return linePagerIndicator;
     }
 
+    public void setOnIndicatorTapClickListener(OnIndicatorTapClickListener listener) {
+        this.mOnTabClickListener=listener;
+    }
+
+    public interface OnIndicatorTapClickListener {
+        void onTabClick(int index);
+    }
 }
