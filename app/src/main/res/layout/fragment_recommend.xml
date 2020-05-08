@@ -9,7 +9,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:id="@+id/recommend_list"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#F4F4F4">
 
     </androidx.recyclerview.widget.RecyclerView>
 </RelativeLayout>
