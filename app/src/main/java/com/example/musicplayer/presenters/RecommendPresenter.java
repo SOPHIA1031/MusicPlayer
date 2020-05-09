@@ -39,6 +39,7 @@ public class RecommendPresenter implements IRecommendPresenter {
 
     @Override
     public void getRecommendList() {
+        updateLoading();
         //获取推荐内容（SDK文档接口3.10.6）
         Map<String, String> map = new HashMap<>();
         // 一页数据的返回数量
@@ -59,18 +60,40 @@ public class RecommendPresenter implements IRecommendPresenter {
             public void onError(int i, String s) {
                 //报错
                 LogUtil.d(TAG, "ERROR" + i + "-->" + s);
+                handlerError();
             }
         });
     }
 
-    private void handlerRecommendResult(List<Album> albumList){
-        //通知UI更新
+    private void handlerError(){
         if (mCallbacks!=null){
             for (IRecommendViewCallback callback : mCallbacks) {
-                callback.onRecommendListLoaded(albumList);
+                callback.onNetWorkError();
             }
         }
     }
+    private void handlerRecommendResult(List<Album> albumList){
+        //通知UI更新
+        if (mCallbacks!=null){
+            if (albumList.size()==0){
+                //数据为空
+                for (IRecommendViewCallback callback : mCallbacks) {
+                    callback.onDataEmpty();
+                }
+            }else{
+                for (IRecommendViewCallback callback : mCallbacks) {
+                    callback.onRecommendListLoaded(albumList);
+                }
+            }
+        }
+    }
+
+    private void updateLoading(){
+        for (IRecommendViewCallback callback : mCallbacks) {
+            callback.onLoading();
+        }
+    }
+
     @Override
     public void pulltoRefresh() {
 

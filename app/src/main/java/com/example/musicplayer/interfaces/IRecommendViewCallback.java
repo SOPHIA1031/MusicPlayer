@@ -9,9 +9,13 @@ public interface IRecommendViewCallback {
     //获取推荐内容的结果
     void onRecommendListLoaded(List<Album> result);
 
-    //加载更多结果
-    void onLoadMore(List<Album> result);
+    //网络错误
+    void onNetWorkError();
 
-    //更新
-    void onRefreshMore(List<Album> result);
+    //数据为空
+    void onDataEmpty();
+
+    //正在加载
+    void onLoading();
+
 }
