@@ -19,6 +19,7 @@ public abstract class UIloader extends FrameLayout {
     private View mSuccessView;
     private View mNetErrView;
     private View mEmptyView;
+    private onRetryClickListener mOnRetryClickListener=null;
     //枚举类
     public enum  UIStatus {
         LOADING,SUCCESS,NETWORK_ERROR,EMPTY,NONE
@@ -92,11 +93,28 @@ public abstract class UIloader extends FrameLayout {
     }
 
     private View getNetErrView() {
-        return LayoutInflater.from(getContext()).inflate(R.layout.fragment_net_err_view,this,false);
+        View netErrView=LayoutInflater.from(getContext()).inflate(R.layout.fragment_net_err_view,this,false);
+        netErrView.findViewById(R.id.net_err_icon).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //重新获取数据
+                if(mOnRetryClickListener!=null){
+                    mOnRetryClickListener.onRetryClick();
+                }
+            }
+        });//找到控件
+        return netErrView;
     }
 
     private View getLoadingView() {
         return LayoutInflater.from(getContext()).inflate(R.layout.fragment_loading_view,this,false);
     }
     protected  abstract View getSuccessView(ViewGroup container);
+
+    public void setOnRetryClickListener(onRetryClickListener listener) {
+        this.mOnRetryClickListener=listener;
+    }
+    public interface onRetryClickListener{
+        void onRetryClick();
+    }
 }
