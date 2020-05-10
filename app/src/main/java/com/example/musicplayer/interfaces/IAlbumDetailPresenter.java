@@ -7,4 +7,9 @@ public interface IAlbumDetailPresenter {
     void pulltoRefresh();
     //上拉加载更多
     void loadMore();
+
+    //注册回调，注册UI通知的接口
+    void registerCallBack(IAlbumDetailViewCallBack detailViewCallback);
+    //取消UI通知接口
+    void unRegisterCallBack(IAlbumDetailViewCallBack detailViewCallback);
 }

@@ -4,10 +4,42 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <ImageView
+        android:id="@+id/bg_big_cover"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:scaleType="fitXY"
+        android:background="#0000ff" />
+    <ImageView
+        android:id="@+id/bg_small_cover"
+        android:layout_width="75dp"
+        android:layout_height="80dp"
+        android:layout_below="@+id/bg_big_cover"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="-40dp"
+        android:scaleType="fitXY"
+        android:background="#00ff00"/>
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="专辑详情页面"
-        android:layout_centerInParent="true"/>
+        android:orientation="vertical"
+        android:layout_below="@+id/bg_big_cover"
+        android:layout_marginLeft="120dp"
+        android:layout_marginTop="-35dp">
+        <TextView
+            android:id="@+id/al_detail_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="20dp"
+            android:text="这是专辑标题"/>
+        <TextView
+            android:id="@+id/al_detail_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="15dp"
+            android:text="这是专辑内容描述"/>
+    </LinearLayout>
 
 </RelativeLayout>

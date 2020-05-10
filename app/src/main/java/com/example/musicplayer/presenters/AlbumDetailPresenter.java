@@ -1,10 +1,14 @@
 package com.example.musicplayer.presenters;
 
 import com.example.musicplayer.interfaces.IAlbumDetailPresenter;
+import com.example.musicplayer.interfaces.IAlbumDetailViewCallBack;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 
-public class AlbumDetailPresenter implements IAlbumDetailPresenter {
+import java.util.ArrayList;
+import java.util.List;
 
+public class AlbumDetailPresenter implements IAlbumDetailPresenter {
+    private List<IAlbumDetailViewCallBack> mCallbacks=new ArrayList<>();
     private Album mTargetAlbum=null;
     //单例模式
     private AlbumDetailPresenter(){
@@ -36,7 +40,24 @@ public class AlbumDetailPresenter implements IAlbumDetailPresenter {
 
     }
 
+    @Override
+    public void registerCallBack(IAlbumDetailViewCallBack detailViewCallback) {
+        if (!mCallbacks.contains(detailViewCallback)){
+            mCallbacks.add(detailViewCallback);
+            if (mTargetAlbum!=null){
+                detailViewCallback.onAlbumLoaded(mTargetAlbum);
+            }
+
+        }
+    }
+
+    @Override
+    public void unRegisterCallBack(IAlbumDetailViewCallBack detailViewCallback) {
+        mCallbacks.remove(detailViewCallback);
+    }
+
     public void setTargetAlbum(Album album){
+        //加载专辑
         this.mTargetAlbum=album;
     }
 }
