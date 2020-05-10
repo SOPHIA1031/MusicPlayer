@@ -1,5 +1,6 @@
 package com.example.musicplayer.fragments;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +11,12 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.musicplayer.DetailActivity;
 import com.example.musicplayer.R;
 import com.example.musicplayer.adapters.RecomendListAdapter;
 import com.example.musicplayer.base.BaseFragment;
 import com.example.musicplayer.interfaces.IRecommendViewCallback;
+import com.example.musicplayer.presenters.AlbumDetailPresenter;
 import com.example.musicplayer.presenters.RecommendPresenter;
 import com.example.musicplayer.utils.Constants;
 import com.example.musicplayer.utils.LogUtil;
@@ -28,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RecommendFragment extends BaseFragment implements IRecommendViewCallback, UIloader.onRetryClickListener {
+public class RecommendFragment extends BaseFragment implements IRecommendViewCallback, UIloader.onRetryClickListener, RecomendListAdapter.onRecItemClickListener {
     private static final String TAG="RecommendFragment";
     private View mRootView;
     private RecyclerView mRecommendRv;
@@ -81,6 +84,7 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
         mRecommendListAdapter =new RecomendListAdapter();
         mRecommendRv.setAdapter(mRecommendListAdapter);
 
+        mRecommendListAdapter.setOnRecItemClickListener(this);
         return mRootView;
     }
     @Override
@@ -122,5 +126,15 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
         if(mRecommendPresenter!=null){
             mRecommendPresenter.getRecommendList();
         }
+    }
+
+    //专辑点击事件
+    @Override
+    public void onItemClick(int index ,Album album) {
+        //把数据给Presenter
+        AlbumDetailPresenter.getInstance().setTargetAlbum(album);
+        //跳转到详情界面
+        Intent intent =new Intent(getContext(), DetailActivity.class);
+        startActivity(intent);
     }
 }
