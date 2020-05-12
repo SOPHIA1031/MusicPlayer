@@ -4,10 +4,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.musicplayer.DetailActivity;
 import com.example.musicplayer.R;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 
@@ -22,6 +24,7 @@ public class DetailListAdapter extends RecyclerView.Adapter<DetailListAdapter.in
     private List<Track> detailData=new ArrayList<>();
     private SimpleDateFormat mDateFormat=new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat mDurationFormat =new SimpleDateFormat("mm:ss");
+    private ItemClickListener itemClickListener=null;
     @NonNull
     @Override
     //显示UI
@@ -33,7 +36,7 @@ public class DetailListAdapter extends RecyclerView.Adapter<DetailListAdapter.in
     @Override
     public void onBindViewHolder(@NonNull DetailListAdapter.innerHolder holder, int position) {
         //找到对应控件
-        View itemView =holder.itemView;
+        final View itemView =holder.itemView;
         TextView detailItemTitle =itemView.findViewById(R.id.detail_item_title);//歌的标题
         TextView detailItemCount =itemView.findViewById(R.id.detail_item_count);//歌的播放量
         TextView detailItemTime =itemView.findViewById(R.id.detail_item_time); //时长
@@ -47,6 +50,17 @@ public class DetailListAdapter extends RecyclerView.Adapter<DetailListAdapter.in
         detailItemTime.setText(duration);
         String updateTime=mDateFormat.format(track.getUpdatedAt());
         detailItemDate.setText(updateTime);
+
+        //设置item点击事件
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (itemClickListener!=null){
+                    itemClickListener.onItemClick();
+                }
+            }
+        });
+
     }
 
     @Override
@@ -65,5 +79,11 @@ public class DetailListAdapter extends RecyclerView.Adapter<DetailListAdapter.in
         public innerHolder(@NonNull View itemView) {
             super(itemView);
         }
+    }
+    public void setItemClickListener (ItemClickListener listener){
+        this.itemClickListener=listener;
+    }
+    public interface ItemClickListener {
+        void onItemClick();
     }
 }

@@ -34,6 +34,9 @@
         <activity android:name=".DetailActivity">
 
         </activity>
+        <activity android:name=".PlayerActivity">
+
+        </activity>
     </application>
 
 </manifest>

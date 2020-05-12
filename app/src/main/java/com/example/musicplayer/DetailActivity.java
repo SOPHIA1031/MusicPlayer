@@ -1,5 +1,6 @@
 package com.example.musicplayer;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -27,7 +28,7 @@ import java.util.List;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
-public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallBack {
+public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallBack, DetailListAdapter.ItemClickListener {
     private ImageView mLargePic;
     private ImageView mSmallPic;
     private TextView  mAlDetailTitle;
@@ -68,9 +69,17 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
                 outRect.bottom=3;
             }
         });
+        mDetailListAdapter.setItemClickListener(this);
 
     }
 
+    @Override
+    public void onItemClick(){
+        //跳转到播放页
+        Intent intent=new Intent(this,PlayerActivity.class);
+        startActivity(intent);
+
+    }
     @Override
     public void onDetailListLoaded(List<Track> tracks) {
         //更新/设置UI数据
