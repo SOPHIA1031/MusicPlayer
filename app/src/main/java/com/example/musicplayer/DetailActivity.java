@@ -1,11 +1,20 @@
 package com.example.musicplayer;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.example.musicplayer.adapters.DetailListAdapter;
 import com.example.musicplayer.base.BaseActivity;
 import com.example.musicplayer.interfaces.IAlbumDetailPresenter;
 import com.example.musicplayer.interfaces.IAlbumDetailViewCallBack;
@@ -16,12 +25,17 @@ import com.ximalaya.ting.android.opensdk.model.track.Track;
 
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.BlurTransformation;
+
 public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallBack {
     private ImageView mLargePic;
     private ImageView mSmallPic;
     private TextView  mAlDetailTitle;
     private TextView mAlDetailAuthor;
     private AlbumDetailPresenter mAlbumDetailPresenter;
+    private RecyclerView mRecyclerView;
+    private DetailListAdapter mDetailListAdapter;
+    private int mCurrentPage=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +45,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         initView(); //初始化视图
         mAlbumDetailPresenter=AlbumDetailPresenter.getInstance(); //拿到presenter,然后设置回调
         mAlbumDetailPresenter.registerCallBack(this);
+
     }
 
     private void initView() {
@@ -38,11 +53,29 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         mSmallPic =this.findViewById(R.id.bg_small_cover); //专辑图小图
         mAlDetailTitle=this.findViewById(R.id.al_detail_title); //专辑图旁边的专辑标题
         mAlDetailAuthor=this.findViewById(R.id.al_detail_author); //专辑图标题下面的作者
+        mRecyclerView=this.findViewById(R.id.album_detail_list);
+        //设置布局管理器
+        LinearLayoutManager layoutManager =new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(layoutManager);
+        //设置适配器
+        mDetailListAdapter=new DetailListAdapter();
+        mRecyclerView.setAdapter(mDetailListAdapter);
+        //设置item的上下间距
+        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                outRect.top=3;
+                outRect.bottom=3;
+            }
+        });
+
     }
 
     @Override
     public void onDetailListLoaded(List<Track> tracks) {
-        //加载
+        //更新/设置UI数据
+        mDetailListAdapter.setData(tracks);
+
     }
 
     @Override
@@ -54,11 +87,19 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
             mAlDetailAuthor.setText(album.getAnnouncer().getNickname());
         }
         if (mLargePic!=null){
-            Picasso.with(this).load(album.getCoverUrlLarge()).into(mLargePic);
+            //做高斯模糊处理
+            Glide.with(this)
+                    .load(album.getCoverUrlLarge()).bitmapTransform(new BlurTransformation(this, 25,1)).into(mLargePic);
+                    // 25：模糊半径，越大图片越模糊 范围：1-25，1：缩放倍数
+            //Picasso.with(this).load(album.getCoverUrlLarge()).into(mLargePic);
         }
         if (mSmallPic!=null){
             //加载图片
             Picasso.with(this).load(album.getCoverUrlSmall()).into(mSmallPic);
         }
+
+        //获取专辑详情内容
+        long id =album.getId();
+        mAlbumDetailPresenter.albumDetail((int)id ,mCurrentPage);
     }
 }
