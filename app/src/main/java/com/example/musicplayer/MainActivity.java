@@ -15,13 +15,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import com.example.musicplayer.adapters.ImageAdapter;
 import com.example.musicplayer.adapters.IndicatorAdapter;
 import com.example.musicplayer.adapters.MainContentAdapter;
+import com.example.musicplayer.utils.DataBean;
 import com.example.musicplayer.utils.LogUtil;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
 import com.ximalaya.ting.android.opensdk.model.category.Category;
 import com.ximalaya.ting.android.opensdk.model.category.CategoryList;
+import com.youth.banner.Banner;
+
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
@@ -39,6 +43,7 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         initView();
         initEvent();
+//        useBanner();
     }
     private  void initEvent(){
         mIndicatorAdapter.setOnIndicatorTapClickListener(new IndicatorAdapter.OnIndicatorTapClickListener() {
@@ -70,4 +75,9 @@ public class MainActivity extends FragmentActivity {
         mMagicIndicator.setNavigator(commonNavigator);
         ViewPagerHelper.bind(mMagicIndicator, mContentPager);// viewpager有滑动监听，下面的页面滑动上面的也跟着滑动
     }
+    //设置轮播图
+//    private void useBanner(){
+//        Banner banner=this.findViewById(R.id.banner);
+//        banner.setAdapter(new ImageAdapter(DataBean.getTestData3()));
+//    }
 }

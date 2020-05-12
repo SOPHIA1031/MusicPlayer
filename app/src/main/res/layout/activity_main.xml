@@ -34,7 +34,11 @@
 
 
     </LinearLayout>
-
+<!--    轮播图-->
+<!--    <com.youth.banner.Banner-->
+<!--        android:id="@+id/banner"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="180dp" />-->
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/content_pager"

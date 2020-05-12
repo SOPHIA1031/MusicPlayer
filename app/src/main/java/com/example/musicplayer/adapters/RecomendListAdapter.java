@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.musicplayer.R;
 import com.example.musicplayer.fragments.RecommendFragment;
+import com.example.musicplayer.utils.LogUtil;
 import com.squareup.picasso.Picasso;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
-import com.ximalaya.ting.android.opensdk.model.album.AlbumList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +21,7 @@ import java.util.List;
 public class RecomendListAdapter extends RecyclerView.Adapter<RecomendListAdapter.InnerHolder> {
     private  List<Album> mData= new ArrayList<>();
     private onRecItemClickListener mListener=null;
+    private String TAG="RecommendList:";
     @NonNull
     @Override
     public RecomendListAdapter.InnerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -79,8 +80,15 @@ public class RecomendListAdapter extends RecyclerView.Adapter<RecomendListAdapte
             TextView albumPlayCount =itemView.findViewById(R.id.album_play_count);//播放次数
             TextView albumContentSize =itemView.findViewById(R.id.album_content_size); //专辑中内容数量
 
+            // LogUtil.d(TAG,"title->"+album.getAlbumTitle());
+
             albumTitle.setText(album.getAlbumTitle()); //调用sdk中的方法
-            albumDesc.setText(album.getAlbumIntro());
+            if(album.getAlbumIntro().equals("")){
+                albumDesc.setText("暂无简介");
+            }
+            else {
+                albumDesc.setText(album.getAlbumIntro());
+            }
             albumPlayCount.setText(album.getPlayCount()+"");
             albumContentSize.setText(album.getIncludeTrackCount()+"");
             Picasso.with(itemView.getContext()).load(album.getCoverUrlLarge()).into(albumCoverPic);
