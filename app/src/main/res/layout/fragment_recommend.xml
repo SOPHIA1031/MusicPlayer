@@ -5,6 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--    轮播图-->
+<!--    <com.youth.banner.Banner-->
+<!--        android:id="@+id/banner"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="180dp" />-->
+
 <!--    推荐数据列表-->
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"

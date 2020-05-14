@@ -18,6 +18,7 @@ import com.ximalaya.ting.android.opensdk.model.album.Album;
 import java.util.ArrayList;
 import java.util.List;
 
+//连接数据与展示View的中介，通知RecylerView绘制多少View，每条View怎么绘制，View内部事件如何响应
 public class RecomendListAdapter extends RecyclerView.Adapter<RecomendListAdapter.InnerHolder> {
     private  List<Album> mData= new ArrayList<>();
     private onRecItemClickListener mListener=null;
@@ -40,11 +41,11 @@ public class RecomendListAdapter extends RecyclerView.Adapter<RecomendListAdapte
                 // v.getTag()获得被点击的view的索引
                 if(mListener!=null){
                     int clickPos = (int) v.getTag();
-                    mListener.onItemClick(clickPos,mData.get(clickPos));
+                    mListener.onItemClick(clickPos,mData.get(clickPos));//RecommendFragment中重写
                 }
             }
         });
-        holder.setData(mData.get(position));
+        holder.setData(mData.get(position));  //根据index设置数据
     }
 
     @Override
@@ -80,15 +81,13 @@ public class RecomendListAdapter extends RecyclerView.Adapter<RecomendListAdapte
             TextView albumPlayCount =itemView.findViewById(R.id.album_play_count);//播放次数
             TextView albumContentSize =itemView.findViewById(R.id.album_content_size); //专辑中内容数量
 
-            // LogUtil.d(TAG,"title->"+album.getAlbumTitle());
-
-            albumTitle.setText(album.getAlbumTitle()); //调用sdk中的方法
             if(album.getAlbumIntro().equals("")){
                 albumDesc.setText("暂无简介");
             }
             else {
                 albumDesc.setText(album.getAlbumIntro());
             }
+            albumTitle.setText(album.getAlbumTitle()); //调用sdk中的方法
             albumPlayCount.setText(album.getPlayCount()+"");
             albumContentSize.setText(album.getIncludeTrackCount()+"");
             Picasso.with(itemView.getContext()).load(album.getCoverUrlLarge()).into(albumCoverPic);

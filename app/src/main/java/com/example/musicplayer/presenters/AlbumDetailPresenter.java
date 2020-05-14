@@ -38,7 +38,7 @@ public class AlbumDetailPresenter implements IAlbumDetailPresenter {
     @Override
     public void albumDetail(int id, int page) {
         // SDK文档接口3.2.4
-        //根据页码和id获取数据
+        //根据Id获取数据
         Map<String, String> map = new HashMap<String, String>();
         map.put(DTransferConstants.ALBUM_ID, id+"");
         map.put(DTransferConstants.SORT, "asc");
@@ -51,7 +51,6 @@ public class AlbumDetailPresenter implements IAlbumDetailPresenter {
                     List<Track> tracks =trackList.getTracks();
                     LogUtil.d(TAG,"track size");
                     handlerAlbumDetailResult(tracks);
-
                 }
             }
 

@@ -42,7 +42,7 @@ public class IndicatorAdapter extends CommonNavigatorAdapter {
         colorTransitionPagerTitleView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                // 根据index 切换ViewPagen
+                // 根据index 切换ViewPager
                 if(mOnTabClickListener!=null){
                     mOnTabClickListener.onTabClick(index); //调用MianActivity中的方法
                 }

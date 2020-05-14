@@ -40,7 +40,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);   //给Activity设置一个layout布局
         initView();
         initEvent();
 //        useBanner();
@@ -51,11 +51,12 @@ public class MainActivity extends FragmentActivity {
             public void onTabClick(int index) {
                 LogUtil.d(TAG,"click index is"+index);
                 if (mContentPager!=null){
-                    mContentPager.setCurrentItem(index);
+                    mContentPager.setCurrentItem(index);   //点击导航条时，跳转到对应的页面（封装的方法）
                 }
             }
         });
     }
+    //最上面的导航条
     private void initView(){
         mMagicIndicator = this.findViewById(R.id.main_indicator);
         mMagicIndicator.setBackgroundColor(this.getResources().getColor(R.color.main_color));
