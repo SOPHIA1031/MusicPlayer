@@ -15,11 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.musicplayer.adapters.DetailListAdapter;
 import com.example.musicplayer.base.BaseActivity;
 import com.example.musicplayer.interfaces.IAlbumDetailPresenter;
 import com.example.musicplayer.interfaces.IAlbumDetailViewCallBack;
 import com.example.musicplayer.presenters.AlbumDetailPresenter;
+import com.example.musicplayer.utils.GlideBlurformation;
 import com.squareup.picasso.Picasso;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
@@ -27,6 +29,8 @@ import com.ximalaya.ting.android.opensdk.model.track.Track;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
+
+import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallBack, DetailListAdapter.ItemClickListener {
     private ImageView mLargePic;
@@ -97,10 +101,15 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         }
         if (mLargePic!=null){
             //做高斯模糊处理
-            Glide.with(this)
-                    .load(album.getCoverUrlLarge()).bitmapTransform(new BlurTransformation(this, 25,1)).into(mLargePic);
+//            Glide.with(this)
+//                    .load(album.getCoverUrlLarge()).apply(bitmapTransform(new BlurTransformation(this,25,8))).into(mLargePic);
                     // 25：模糊半径，越大图片越模糊 范围：1-25，1：缩放倍数
             //Picasso.with(this).load(album.getCoverUrlLarge()).into(mLargePic);
+            Glide.with(this)
+                    .load(album.getCoverUrlLarge())
+                    .apply(RequestOptions.bitmapTransform(new GlideBlurformation(this)))
+                    .into(mLargePic);
+
         }
         if (mSmallPic!=null){
             //加载图片

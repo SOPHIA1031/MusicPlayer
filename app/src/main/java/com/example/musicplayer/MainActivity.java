@@ -1,35 +1,28 @@
 package com.example.musicplayer;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
+import android.widget.Toast;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
-import com.example.musicplayer.adapters.ImageAdapter;
 import com.example.musicplayer.adapters.IndicatorAdapter;
 import com.example.musicplayer.adapters.MainContentAdapter;
-import com.example.musicplayer.utils.DataBean;
+import com.example.musicplayer.utils.ImageFactory;
 import com.example.musicplayer.utils.LogUtil;
-import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
-import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
-import com.ximalaya.ting.android.opensdk.model.category.Category;
-import com.ximalaya.ting.android.opensdk.model.category.CategoryList;
-import com.youth.banner.Banner;
+import com.hacknife.carouselbanner.Banner;
+import com.hacknife.carouselbanner.CoolCarouselBanner;
+import com.hacknife.carouselbanner.interfaces.OnCarouselItemChangeListener;
+import com.hacknife.carouselbanner.interfaces.OnCarouselItemClickListener;
+//import com.youth.banner.Banner;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
 
 public class MainActivity extends FragmentActivity {
 
@@ -37,6 +30,8 @@ public class MainActivity extends FragmentActivity {
     private IndicatorAdapter mIndicatorAdapter;
     private ViewPager mContentPager;
     private MagicIndicator mMagicIndicator;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,9 +71,5 @@ public class MainActivity extends FragmentActivity {
         mMagicIndicator.setNavigator(commonNavigator);
         ViewPagerHelper.bind(mMagicIndicator, mContentPager);// viewpager有滑动监听，下面的页面滑动上面的也跟着滑动
     }
-    //设置轮播图
-//    private void useBanner(){
-//        Banner banner=this.findViewById(R.id.banner);
-//        banner.setAdapter(new ImageAdapter(DataBean.getTestData3()));
-//    }
+
 }

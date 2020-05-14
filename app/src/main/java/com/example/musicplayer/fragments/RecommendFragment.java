@@ -5,34 +5,29 @@ import android.graphics.Rect;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.musicplayer.DetailActivity;
+import com.example.musicplayer.MainActivity;
 import com.example.musicplayer.R;
-import com.example.musicplayer.adapters.ImageAdapter;
 import com.example.musicplayer.adapters.RecomendListAdapter;
 import com.example.musicplayer.base.BaseFragment;
 import com.example.musicplayer.interfaces.IRecommendViewCallback;
 import com.example.musicplayer.presenters.AlbumDetailPresenter;
 import com.example.musicplayer.presenters.RecommendPresenter;
-import com.example.musicplayer.utils.Constants;
-import com.example.musicplayer.utils.DataBean;
-import com.example.musicplayer.utils.LogUtil;
+import com.example.musicplayer.utils.ImageFactory;
 import com.example.musicplayer.views.UIloader;
-import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
-import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
-import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
+import com.hacknife.carouselbanner.Banner;
+import com.hacknife.carouselbanner.CoolCarouselBanner;
+import com.hacknife.carouselbanner.interfaces.OnCarouselItemChangeListener;
+import com.hacknife.carouselbanner.interfaces.OnCarouselItemClickListener;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
-import com.ximalaya.ting.android.opensdk.model.album.GussLikeAlbumList;
-import com.youth.banner.Banner;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class RecommendFragment extends BaseFragment implements IRecommendViewCallback, UIloader.onRetryClickListener, RecomendListAdapter.onRecItemClickListener {
     private static final String TAG="RecommendFragment";
@@ -41,7 +36,8 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
     private RecomendListAdapter mRecommendListAdapter;
     private RecommendPresenter mRecommendPresenter;
     private UIloader mUIloader;
-//    private Banner mBanner;
+    CoolCarouselBanner banner;
+
     @Override
     protected View onSubViewLoaded(final LayoutInflater layoutInflater, ViewGroup container) {
         mUIloader=new UIloader(getContext()) {
@@ -98,11 +94,31 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
 
         mRecommendListAdapter.setOnRecItemClickListener(this);  //设置item点击的监听
 
-        //-----------------轮播图新添加
-        //创建（new banner()）或者布局文件中获取banner
-//        mBanner =mRootView.findViewById(R.id.banner);
-//        //默认直接设置adapter就行了
-//        mBanner.setAdapter(new ImageAdapter(DataBean.getTestData3()));
+        //-----------------轮播图添加
+        banner = mRootView.findViewById(R.id.banner);
+        List<String> list = new ArrayList<>();
+        Banner.init(new ImageFactory());
+        list.add("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3893798113,2002765214&fm=26&gp=0.jpg");
+        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589442267334&di=b77d8b8eceb876aa2ffdf63d913793a7&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F784e942957c0d5eb85d45047dbb0f2bb055e3d30aaba-vlms9j_fw658");
+        list.add("https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3960632197,3985528648&fm=15&gp=0.jpg");
+        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589442267334&di=b40a96d6f3d07347566380148c91d9a2&imgtype=0&src=http%3A%2F%2Fhbimg.huabanimg.com%2F21ed315d050a43835caf4f503aa43fee5adde0c920ec2-zFUbgw_fw658");
+        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589442267333&di=e58748229ef60811e4c92450ce453899&imgtype=0&src=http%3A%2F%2Fhbimg.huabanimg.com%2F1d28c650199db55aa9602a511803e7377388b956eaf2-LLKbqs_fw658");
+        list.add("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3012112261,1934803070&fm=26&gp=0.jpg");
+
+        banner.setOnCarouselItemChangeListener(new OnCarouselItemChangeListener() {
+            @Override
+            public void onItemChange(int position) {
+//                Toast.makeText(getContext(), String.valueOf(position), Toast.LENGTH_LONG).show();
+            }
+        });
+        banner.setOnCarouselItemClickListener(new OnCarouselItemClickListener() {
+            @Override
+            public void onItemClick(int position, String url) {
+                Toast.makeText(getContext(), url, Toast.LENGTH_LONG).show();
+            }
+        });
+        banner.initBanner(list);
+
         return mRootView;
     }
     @Override
