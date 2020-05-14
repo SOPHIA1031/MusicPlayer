@@ -94,13 +94,13 @@
             android:text="这是专辑内容描述"/>
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/album_detail_list"
+    <FrameLayout
+        android:id="@+id/detail_list_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/play_control"
-        android:background="#60E7E6E6">
+        android:layout_below="@id/play_control">
 
-    </androidx.recyclerview.widget.RecyclerView>
+    </FrameLayout>
+
 
 </RelativeLayout>

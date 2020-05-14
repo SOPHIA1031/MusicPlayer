@@ -5,10 +5,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,10 +22,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.musicplayer.adapters.DetailListAdapter;
 import com.example.musicplayer.base.BaseActivity;
+import com.example.musicplayer.base.BaseApplication;
 import com.example.musicplayer.interfaces.IAlbumDetailPresenter;
 import com.example.musicplayer.interfaces.IAlbumDetailViewCallBack;
 import com.example.musicplayer.presenters.AlbumDetailPresenter;
 import com.example.musicplayer.utils.GlideBlurformation;
+import com.example.musicplayer.views.UIloader;
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.squareup.picasso.Picasso;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
@@ -41,6 +49,10 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     private RecyclerView mRecyclerView;
     private DetailListAdapter mDetailListAdapter;
     private int mCurrentPage=1;
+    private FrameLayout mDetailListContainer;
+    private UIloader uiLoader;
+    TwinklingRefreshLayout mRefreshLayout;
+    private List<Track> mCurrentTrack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,11 +66,30 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     }
 
     private void initView() {
+        mDetailListContainer=this.findViewById(R.id.detail_list_container);  //FragmentLayout可以显示任意内容
+        if (uiLoader==null){
+            //创建UILOADER
+            uiLoader =new UIloader(this) {
+                @Override
+                protected View getSuccessView(ViewGroup container) {
+                    return createSuccessView(container);
+                }
+            };
+            mDetailListContainer.removeAllViews(); //添加前去掉所有的
+            mDetailListContainer.addView(uiLoader); //新的添加到container里面
+        }
         mLargePic =this.findViewById(R.id.bg_big_cover); //详情页背景的大图
         mSmallPic =this.findViewById(R.id.bg_small_cover); //专辑图小图
         mAlDetailTitle=this.findViewById(R.id.al_detail_title); //专辑图旁边的专辑标题
         mAlDetailAuthor=this.findViewById(R.id.al_detail_author); //专辑图标题下面的作者
-        mRecyclerView=this.findViewById(R.id.album_detail_list);
+
+
+    }
+    private  boolean mIsLoaderMore=false;
+    private View createSuccessView(ViewGroup container){
+        View mDetailListView=LayoutInflater.from(this).inflate(R.layout.item_detail_list,container,false);
+        mRecyclerView=mDetailListView.findViewById(R.id.album_detail_list);
+        mRefreshLayout = mDetailListView.findViewById(R.id.refresh_layout);
         //设置布局管理器
         LinearLayoutManager layoutManager =new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -75,6 +106,30 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         });
         mDetailListAdapter.setItemClickListener(this);
 
+        mRefreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {
+            @Override
+            public void onRefresh(TwinklingRefreshLayout refreshLayout) {
+                super.onRefresh(refreshLayout);
+                BaseApplication.getHandler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(DetailActivity.this,"刷新成功",Toast.LENGTH_SHORT).show();
+                        mRefreshLayout.finishRefreshing();
+                    }
+                },2000);
+            }
+
+            @Override
+            public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
+                super.onLoadMore(refreshLayout);
+                // presenter层去加载更多的内容
+                if (mAlbumDetailPresenter!=null){
+                    mAlbumDetailPresenter.loadMore();
+                    mIsLoaderMore=true;
+                }
+            }
+        }); //下拉刷新的监听
+        return mDetailListView;
     }
 
     @Override
@@ -86,6 +141,23 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     }
     @Override
     public void onDetailListLoaded(List<Track> tracks) {
+        if (mIsLoaderMore&& mRefreshLayout!=null){
+            mRefreshLayout.finishLoadmore();
+            mIsLoaderMore=false;
+
+        }
+        this.mCurrentTrack=tracks;
+        // 判断结果，显示对应UI
+        if(tracks==null || tracks.size()==0){
+            if (uiLoader!=null) {
+                uiLoader.updateStatus(UIloader.UIStatus.EMPTY);
+            }
+        }
+
+        if (uiLoader!=null){
+            uiLoader.updateStatus(UIloader.UIStatus.SUCCESS);
+        }
+
         //更新/设置UI数据
         mDetailListAdapter.setData(tracks);
 
@@ -119,5 +191,15 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         //获取专辑详情内容
         long id =album.getId();
         mAlbumDetailPresenter.albumDetail((int)id ,mCurrentPage);
+        //拿数据显示loading
+        if (uiLoader!=null){
+            uiLoader.updateStatus(UIloader.UIStatus.LOADING);
+        }
+    }
+
+    @Override
+    public void onNetError(int errCode, String errMsg) {
+        //请求发送错误
+        uiLoader.updateStatus(UIloader.UIStatus.NETWORK_ERROR);
     }
 }

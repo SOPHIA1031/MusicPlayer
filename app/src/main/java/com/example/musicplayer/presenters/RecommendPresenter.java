@@ -2,6 +2,7 @@ package com.example.musicplayer.presenters;
 
 import androidx.annotation.Nullable;
 
+import com.example.musicplayer.api.MusicAPI;
 import com.example.musicplayer.interfaces.IRecommendPresenter;
 import com.example.musicplayer.interfaces.IRecommendViewCallback;
 import com.example.musicplayer.utils.Constants;
@@ -40,11 +41,8 @@ public class RecommendPresenter implements IRecommendPresenter {
     @Override
     public void getRecommendList() {
         updateLoading();
-        //获取推荐内容（SDK文档接口3.10.6）
-        Map<String, String> map = new HashMap<>();
-        // 一页数据的返回数量
-        map.put(DTransferConstants.LIKE_COUNT, Constants.RECOMMEND_COUNT + "");
-        CommonRequest.getGuessLikeAlbum(map, new IDataCallBack<GussLikeAlbumList>() {
+        MusicAPI musicAPI=MusicAPI.getInstance();
+        musicAPI.getRecommendList(new IDataCallBack<GussLikeAlbumList>() {
             //回调函数,手机记得联网
             @Override
             public void onSuccess(@Nullable GussLikeAlbumList gussLikeAlbumList) {
