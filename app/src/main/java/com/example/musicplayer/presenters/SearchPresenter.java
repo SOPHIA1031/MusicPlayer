@@ -87,6 +87,9 @@ public class SearchPresenter implements ISearchPresenter {
                 if (hotWordList != null) {
                     List<HotWord> hotWords = hotWordList.getHotWordList();
                     LogUtil.d(TAG, "hotWords -- > " + hotWords.size());
+                    for (ISearchCallback iSearchCallback : mCallback) {
+                        iSearchCallback.onHotWordLoaded(hotWords);
+                    }
                 }
             }
 
