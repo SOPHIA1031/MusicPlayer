@@ -40,6 +40,10 @@
         <activity android:name=".PlayerActivity">
 
         </activity>
+        <activity android:name=".SearchActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
     </application>
 
 </manifest>

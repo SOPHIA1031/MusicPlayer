@@ -4,7 +4,9 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ public class MainActivity extends FragmentActivity {
     private IndicatorAdapter mIndicatorAdapter;
     private ViewPager mContentPager;
     private MagicIndicator mMagicIndicator;
+    private View mSearchBtn;
 
 
     @Override
@@ -48,6 +51,14 @@ public class MainActivity extends FragmentActivity {
                 if (mContentPager!=null){
                     mContentPager.setCurrentItem(index);   //点击导航条时，跳转到对应的页面（封装的方法）
                 }
+            }
+        });
+
+        mSearchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,SearchActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -70,6 +81,9 @@ public class MainActivity extends FragmentActivity {
         // 绑定
         mMagicIndicator.setNavigator(commonNavigator);
         ViewPagerHelper.bind(mMagicIndicator, mContentPager);// viewpager有滑动监听，下面的页面滑动上面的也跟着滑动
+
+        //搜索
+        mSearchBtn=this.findViewById(R.id.search_btn);
     }
 
 }
