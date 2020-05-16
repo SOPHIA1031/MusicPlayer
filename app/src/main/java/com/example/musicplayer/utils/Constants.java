@@ -7,5 +7,5 @@ public class Constants {
     // 获取推荐列表的专辑数量
     public static int RECOMMEND_COUNT=40;
     //获取热词的数量
-    public static int COUNT_HOT_WORD=20;
+    public static int COUNT_HOT_WORD=10;
 }
