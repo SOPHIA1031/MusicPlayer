@@ -46,7 +46,6 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
     private View mSearchBtn;
     private FrameLayout mResultContainer;
     private SearchPresenter mSearchPresenter;
-    private UIloader mContent;
     private RecyclerView mResultListView;
     private RecomendListAdapter mRecomendListAdapter;
     private UIloader mUILoader;
@@ -120,7 +119,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
                 String keyword = mInputBox.getText().toString().trim();
                 if (mSearchPresenter != null) {
                     mSearchPresenter.doSearch(keyword);
-                    mContent.updateStatus(UIloader.UIStatus.LOADING);
+                    mUILoader.updateStatus(UIloader.UIStatus.LOADING);
                 }
             }
         });
@@ -148,17 +147,17 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
         mSearchBtn = this.findViewById(R.id.search_btn);
         mResultContainer = this.findViewById((R.id.search_container));
 //        mFlowTextLayout = this.findViewById(R.id.flow_text_layout);
-        if (mContent == null) {
-            mContent = new UIloader(this) {
+        if (mUILoader == null) {
+            mUILoader = new UIloader(this) {
                 @Override
                 protected View getSuccessView(ViewGroup container) {
                     return createSuccessView();
                 }
             };
-            if (mContent.getParent() instanceof ViewGroup) {
-                ((ViewGroup) mContent.getParent()).removeView(mContent);
+            if (mUILoader.getParent() instanceof ViewGroup) {
+                ((ViewGroup) mUILoader.getParent()).removeView(mUILoader);
             }
-            mResultContainer.addView(mContent);
+            mResultContainer.addView(mUILoader);
 
         }
     }
@@ -171,7 +170,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
     private View createSuccessView() {
         View resultView = LayoutInflater.from(this).inflate(R.layout.search_result_layout, null);
         //显示热词的
-        mFlowTextLayout = resultView.findViewById(R.id.result_list_view);
+        mFlowTextLayout = resultView.findViewById(R.id.recommend_hot_word_view);
 
         mResultListView = resultView.findViewById(R.id.result_list_view);
         //设置布局管理器
@@ -202,14 +201,14 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
         if (result != null) {
             if (result.size() == 0) {
                 //数据为空
-                if (mContent != null) {
-                    mContent.updateStatus(UIloader.UIStatus.EMPTY);
+                if (mUILoader != null) {
+                    mUILoader.updateStatus(UIloader.UIStatus.EMPTY);
                 }
 
             } else {
                 //如果数据不为空，那么就设置数据
                 mRecomendListAdapter.setData(result);
-                mContent.updateStatus(UIloader.UIStatus.SUCCESS);
+                mUILoader.updateStatus(UIloader.UIStatus.SUCCESS);
             }
         }
     }
