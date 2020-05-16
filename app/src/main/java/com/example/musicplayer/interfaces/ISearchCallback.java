@@ -32,5 +32,12 @@ public interface ISearchCallback  {
      */
     void onRecommendWordLoaded(List<QueryResult> keyWordList);
 
+    /**
+     * 错误通知
+     * @param errorCode
+     * @param errorMsg
+     */
+    void onError(int errorCode,String errorMsg);
+
 
 }

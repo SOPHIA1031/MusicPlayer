@@ -2,19 +2,26 @@ package com.example.musicplayer;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Layout;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.musicplayer.base.BaseActivity;
 import com.example.musicplayer.interfaces.ISearchCallback;
 import com.example.musicplayer.presenters.SearchPresenter;
 import com.example.musicplayer.utils.LogUtil;
 import com.example.musicplayer.views.FlowTextLayout;
+import com.example.musicplayer.views.UIloader;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.word.HotWord;
 import com.ximalaya.ting.android.opensdk.model.word.QueryResult;
@@ -31,7 +38,9 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
     private View mSearchBtn;
     private FrameLayout mResultContainer;
     private SearchPresenter mSearchPresenter;
-    private FlowTextLayout mFlowTextLayout;
+    private UIloader mContent;
+    private RecyclerView mResultListView;
+//    private FlowTextLayout mFlowTextLayout;
 
 
     @Override
@@ -93,12 +102,12 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 
             }
         });
-        mFlowTextLayout.setClickListener(new FlowTextLayout.ItemClickListener() {
+        /*mFlowTextLayout.setClickListener(new FlowTextLayout.ItemClickListener() {
             @Override
             public void onItemClick(String text) {
                 Toast.makeText(SearchActivity.this, text, Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
 
     }
 
@@ -107,7 +116,34 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
         mInputBox = this.findViewById(R.id.search_input);
         mSearchBtn = this.findViewById(R.id.search_btn);
         mResultContainer = this.findViewById((R.id.search_container));
-        mFlowTextLayout = this.findViewById(R.id.flow_text_layout);
+//        mFlowTextLayout = this.findViewById(R.id.flow_text_layout);
+        if (mContent == null) {
+            mContent=new UIloader(this) {
+                @Override
+                protected View getSuccessView(ViewGroup container) {
+                    return createSuccessView();
+                }
+            };
+            if (mContent.getParent() instanceof ViewGroup) {
+                ((ViewGroup) mContent.getParent()).removeView(mContent);
+            }
+            mResultContainer.addView(mContent);
+        }
+    }
+
+    /**
+     * 创建数据请求成功的View
+     * @return
+     */
+    private View createSuccessView() {
+        View resultView=LayoutInflater.from(this).inflate(R.layout.search_result_layout,null);
+        mResultListView=resultView.findViewById(R.id.result_list_view);
+        //设置布局管理器
+        LinearLayoutManager layoutManager=new LinearLayoutManager(this);
+        mResultListView.setLayoutManager(layoutManager);
+        //设置适配器
+
+        return resultView;
     }
 
     @Override
@@ -126,7 +162,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
         }
         Collections.sort(hotWords);
         //更新UI
-        mFlowTextLayout.setTextContents(hotWords);
+//        mFlowTextLayout.setTextContents(hotWords);
     }
 
     @Override
@@ -136,6 +172,11 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 
     @Override
     public void onRecommendWordLoaded(List<QueryResult> keyWordList) {
+
+    }
+
+    @Override
+    public void onError(int errorCode, String errorMsg) {
 
     }
 }

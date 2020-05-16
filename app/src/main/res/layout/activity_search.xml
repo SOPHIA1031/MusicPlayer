@@ -50,11 +50,11 @@
     <FrameLayout
         android:id="@+id/search_container"
         android:layout_width="match_parent"
-        android:layout_height="0dp" />
+        android:layout_height="match_parent" />
 
-    <com.example.musicplayer.views.FlowTextLayout
+    <!--<com.example.musicplayer.views.FlowTextLayout
         android:id="@+id/flow_text_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp" />
+        android:layout_margin="10dp" />-->
 </LinearLayout>

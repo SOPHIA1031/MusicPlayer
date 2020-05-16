@@ -65,6 +65,9 @@ public class SearchPresenter implements ISearchPresenter {
             public void onError(int errorCode, String errorMsg) {
                 LogUtil.d(TAG, "errorCode -- > " + errorCode);
                 LogUtil.d(TAG, "errorMsg -- > " + errorMsg);
+                for (ISearchCallback iSearchCallback : mCallback) {
+                    iSearchCallback.onError(errorCode,errorMsg);
+                }
             }
         });
     }
