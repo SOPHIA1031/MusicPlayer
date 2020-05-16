@@ -4,4 +4,9 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="main_color">#FA7254</color>
+    <color name="white">#FFFFFF</color>
+    <color name="second_color">#FA7254</color>
+    <color name="black">#000000</color>
+    <color name="sub_text_title">#979797</color>
+    <color name="play_list_line_color">#ECEEF0</color>
 </resources>
