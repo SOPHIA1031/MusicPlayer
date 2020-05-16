@@ -1,8 +1,6 @@
 package com.example.musicplayer;
 
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,9 +20,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.musicplayer.adapters.DetailListAdapter;
 import com.example.musicplayer.base.BaseActivity;
 import com.example.musicplayer.base.BaseApplication;
-import com.example.musicplayer.interfaces.IAlbumDetailPresenter;
 import com.example.musicplayer.interfaces.IAlbumDetailViewCallBack;
 import com.example.musicplayer.presenters.AlbumDetailPresenter;
+import com.example.musicplayer.presenters.PlayerPresenter;
 import com.example.musicplayer.utils.GlideBlurformation;
 import com.example.musicplayer.views.UIloader;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
@@ -35,10 +32,6 @@ import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 
 import java.util.List;
-
-import jp.wasabeef.glide.transformations.BlurTransformation;
-
-import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallBack, DetailListAdapter.ItemClickListener {
     private ImageView mLargePic;
@@ -61,7 +54,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         initView(); //初始化视图
         mAlbumDetailPresenter=AlbumDetailPresenter.getInstance(); //拿到presenter,然后设置回调
-        mAlbumDetailPresenter.registerCallBack(this);
+        mAlbumDetailPresenter.registerViewCallback(this);
 
     }
 
@@ -133,8 +126,11 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     }
 
     @Override
-    public void onItemClick(){
-        //跳转到播放页
+    public void onItemClick(List<Track> detailData, int position){
+//        设置播放器的数据
+        PlayerPresenter playerPresenter = PlayerPresenter.getPlayerPresenter();
+        playerPresenter.setsPlayList(detailData, position);
+//        跳转到播放页
         Intent intent=new Intent(this,PlayerActivity.class);
         startActivity(intent);
 

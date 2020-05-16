@@ -8,7 +8,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.musicplayer.DetailActivity;
 import com.example.musicplayer.R;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 
@@ -20,6 +19,7 @@ import java.util.List;
 //适配器
 public class DetailListAdapter extends RecyclerView.Adapter<DetailListAdapter.innerHolder> {
     private List<Track> detailData=new ArrayList<>();
+    //格式化时间
     private SimpleDateFormat mDateFormat=new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat mDurationFormat =new SimpleDateFormat("mm:ss");
     private ItemClickListener itemClickListener=null;
@@ -54,7 +54,8 @@ public class DetailListAdapter extends RecyclerView.Adapter<DetailListAdapter.in
             @Override
             public void onClick(View v) {
                 if (itemClickListener!=null){
-                    itemClickListener.onItemClick();
+                    // 需要设置列表和位置
+                    itemClickListener.onItemClick(detailData,position);
                 }
             }
         });
@@ -82,6 +83,6 @@ public class DetailListAdapter extends RecyclerView.Adapter<DetailListAdapter.in
         this.itemClickListener=listener;
     }
     public interface ItemClickListener {
-        void onItemClick();
+        void onItemClick(List<Track> detailData, int position);
     }
 }

@@ -3,9 +3,105 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="播放页"
-        android:layout_centerInParent="true"/>
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:id="@+id/track_title"
+        android:text="gequisallajsdla"
+        android:textSize="20sp"/>
+    
+    <androidx.viewpager.widget.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/track_title"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="100dp"
+        android:background="#376B81"/>
+        
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+<!--进度条和时间-->
+        <RelativeLayout
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/current_position"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="00:00"
+                android:textSize="13sp"/>
+            <SeekBar
+                android:id="@+id/track_seek_bar"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="45dp"
+                android:layout_marginRight="50dp"
+                />
+            <TextView
+                android:id="@+id/track_duration"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="00:00"
+                android:textSize="13sp"/>
+
+        </RelativeLayout>
+
+<!--播放控制-->
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/sort_descending_normal"
+                android:layout_weight="1"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/previous_normal"
+                android:layout_weight="1"/>
+            <ImageView
+                android:id="@+id/play_or_pause_btn"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:src="@mipmap/play_normal"
+                android:layout_weight="1"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/next_normal"
+                android:layout_weight="1"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/player_icon_list_normal"
+                android:layout_weight="1"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
 </RelativeLayout>

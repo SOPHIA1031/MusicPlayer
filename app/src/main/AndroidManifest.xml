@@ -15,8 +15,8 @@
     <!--target >=28 需要设置此权限 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
-<!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
-<!--    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />-->
+    <!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
+    <!--    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />-->
 
 <!--    icon那里可以修改app图标-->
     <application
@@ -40,6 +40,9 @@
         <activity android:name=".PlayerActivity">
 
         </activity>
+        <service
+            android:name="com.ximalaya.ting.android.opensdk.player.service.XmPlayerService"
+            android:process=":player"/>
     </application>
 
 </manifest>

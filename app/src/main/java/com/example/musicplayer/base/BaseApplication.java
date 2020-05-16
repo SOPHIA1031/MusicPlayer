@@ -1,17 +1,21 @@
 package com.example.musicplayer.base;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.Handler;
+import android.view.contentcapture.ContentCaptureCondition;
 
 import com.example.musicplayer.utils.LogUtil;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
+import com.ximalaya.ting.android.opensdk.player.XmPlayerManager;
 
 import java.util.logging.LogRecord;
 
 public class BaseApplication extends Application {
 
-    private static Handler sHandler =null;
+    private static Handler sHandler = null;
+    private static Context sContext = null;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -27,10 +31,20 @@ public class BaseApplication extends Application {
             mXimalaya.setPackid("com.ximalaya.qunfeng");
             mXimalaya.init(this ,mAppSecret);
         }
+
+        // 初始化播放器
+        XmPlayerManager.getInstance(this).init();
+
         // 初始化LogUtil类
         LogUtil.init(this.getPackageName(), false);
 
         sHandler = new Handler();
+
+        sContext = getBaseContext();
+    }
+
+    public static Context getAppContext(){
+        return sContext;
     }
 
     public static  Handler getHandler(){
