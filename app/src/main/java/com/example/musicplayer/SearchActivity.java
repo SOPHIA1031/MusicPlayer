@@ -1,5 +1,7 @@
 package com.example.musicplayer;
 
+import android.content.Context;
+import android.inputmethodservice.InputMethodService;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Layout;
@@ -7,6 +9,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -16,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.musicplayer.adapters.RecomendListAdapter;
 import com.example.musicplayer.base.BaseActivity;
 import com.example.musicplayer.interfaces.ISearchCallback;
 import com.example.musicplayer.presenters.SearchPresenter;
@@ -40,6 +44,9 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
     private SearchPresenter mSearchPresenter;
     private UIloader mContent;
     private RecyclerView mResultListView;
+    private RecomendListAdapter mRecomendListAdapter;
+    private UIloader mUILoader;
+
 //    private FlowTextLayout mFlowTextLayout;
 
 
@@ -71,6 +78,15 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
     }
 
     private void initEvent() {
+        mUILoader.setOnRetryClickListener(new UIloader.onRetryClickListener() {
+            @Override
+            public void onRetryClick() {
+                if (mSearchPresenter != null) {
+                    mSearchPresenter.reSearch();
+                    mUILoader.updateStatus(UIloader.UIStatus.LOADING);
+                }
+            }
+        });
         mBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +96,12 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
         mSearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo:去调用搜索的逻辑
+                //去调用搜索的逻辑
+                String keyword = mInputBox.getText().toString().trim();
+                if (mSearchPresenter != null) {
+                    mSearchPresenter.doSearch(keyword);
+                    mContent.updateStatus(UIloader.UIStatus.LOADING);
+                }
             }
         });
         mInputBox.addTextChangedListener(new TextWatcher() {
@@ -118,7 +139,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
         mResultContainer = this.findViewById((R.id.search_container));
 //        mFlowTextLayout = this.findViewById(R.id.flow_text_layout);
         if (mContent == null) {
-            mContent=new UIloader(this) {
+            mContent = new UIloader(this) {
                 @Override
                 protected View getSuccessView(ViewGroup container) {
                     return createSuccessView();
@@ -128,27 +149,45 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
                 ((ViewGroup) mContent.getParent()).removeView(mContent);
             }
             mResultContainer.addView(mContent);
+
         }
     }
 
     /**
      * 创建数据请求成功的View
+     *
      * @return
      */
     private View createSuccessView() {
-        View resultView=LayoutInflater.from(this).inflate(R.layout.search_result_layout,null);
-        mResultListView=resultView.findViewById(R.id.result_list_view);
+        View resultView = LayoutInflater.from(this).inflate(R.layout.search_result_layout, null);
+        mResultListView = resultView.findViewById(R.id.result_list_view);
         //设置布局管理器
-        LinearLayoutManager layoutManager=new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mResultListView.setLayoutManager(layoutManager);
         //设置适配器
-
+        mRecomendListAdapter = new RecomendListAdapter();
+        mResultListView.setAdapter(mRecomendListAdapter);
         return resultView;
     }
 
     @Override
     public void onSearchResultLoaded(List<Album> result) {
+        //隐藏键盘
+        InputMethodManager imm= (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mInputBox.getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+        if (result != null) {
+            if (result.size() == 0) {
+                //数据为空
+                if (mContent != null) {
+                    mContent.updateStatus(UIloader.UIStatus.EMPTY);
+                }
 
+            } else {
+                //如果数据不为空，那么就设置数据
+                mRecomendListAdapter.setData(result);
+                mContent.updateStatus(UIloader.UIStatus.SUCCESS);
+            }
+        }
     }
 
     @Override
@@ -177,6 +216,9 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 
     @Override
     public void onError(int errorCode, String errorMsg) {
+        if (mUILoader != null) {
+            mUILoader.updateStatus(UIloader.UIStatus.NETWORK_ERROR);
+        }
 
     }
 }

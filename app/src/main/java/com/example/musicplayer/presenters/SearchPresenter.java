@@ -56,6 +56,9 @@ public class SearchPresenter implements ISearchPresenter {
                 List<Album> albums = searchAlbumList.getAlbums();
                 if (albums != null) {
                     LogUtil.d(TAG, "albums size -- > " + albums.size());
+                    for (ISearchCallback iSearchCallback : mCallback) {
+                        iSearchCallback.onSearchResultLoaded(albums);
+                    }
                 } else {
                     LogUtil.d(TAG, "albums is null..");
                 }
