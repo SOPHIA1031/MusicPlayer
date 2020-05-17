@@ -1,8 +1,10 @@
 package com.example.musicplayer;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -24,7 +26,7 @@ import org.w3c.dom.Text;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class PlayerActivity extends BaseActivity implements IPlayerCallback {
+public class PlayerActivity extends BaseActivity implements IPlayerCallback, ViewPager.OnPageChangeListener {
 
     private static final String TAG ="PlayerActivity";
     private ImageView mControlBtn;
@@ -42,6 +44,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
     private String mTrackTitleText;
     private ViewPager mTrackPageView;
     private PlayerTrackPagerAdapter mTrackPagerAdapter;
+    private boolean mIsUserSlidePager = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,6 +78,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
     }
 
     //给控件设置相关的事件
+    @SuppressLint("ClickableViewAccessibility")
     private void initEvent(){
         mControlBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,6 +129,20 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
                 if (mPlayerPresenter != null) {
                     mPlayerPresenter.playNext();
                 }
+            }
+        });
+        mTrackPageView.addOnPageChangeListener(this);
+        mTrackPageView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        mIsUserSlidePager = true;
+                        break;
+                }
+
+                return false;
             }
         });
     }
@@ -237,13 +255,36 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
     }
 
     @Override
-    public void onTrackUpdate(Track track) {
+    public void onTrackUpdate(Track track, int playIndex) {
         this.mTrackTitleText = track.getTrackTitle();
         if (mTrackTitleTv != null) {
             //设置当前节目的标题
             mTrackTitleTv.setText(mTrackTitleText);
         }
         //当节目改变的时候，我们就获取到当前播放器中播放位置
-        //todo：
+        //当前的节目改变之后修改页面图片
+        if (mTrackPageView != null) {
+            //设置为true时，图片切换是平滑的动画
+            mTrackPageView.setCurrentItem(playIndex,true);
+        }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+    //当页面选中的时候，就去切换播放的内容
+        if (mPlayerPresenter != null && mIsUserSlidePager) {
+            mPlayerPresenter.playByIndex(position);
+        }
+        mIsUserSlidePager = false;
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

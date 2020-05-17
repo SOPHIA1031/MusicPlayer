@@ -26,6 +26,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     private final XmPlayerManager mPlayerManager;
     private List<IPlayerCallback> mIPlayerCallbacks = new ArrayList<>();
     private Track mCurrentTrack;
+    private int mCurrentIndex = 0;
 
     private  PlayerPresenter(){
         mPlayerManager = XmPlayerManager.getInstance(BaseApplication.getAppContext());
@@ -53,6 +54,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
             mPlayerManager.setPlayList(list, playIndex);
             isPlayListSet = true;
             mCurrentTrack = list.get(playIndex);
+            mCurrentIndex = playIndex;
         }else{
             LogUtil.d(TAG,  "mPlayerManager is null");
         }
@@ -110,7 +112,10 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
     @Override
     public void playByIndex(int index) {
-
+    //切换播放器到index得位置进行播放
+        if (mPlayerManager != null) {
+            mPlayerManager.play(index);
+        }
     }
 
     @Override
@@ -127,7 +132,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
     @Override
     public void registerViewCallback(IPlayerCallback iPlayerCallback) {
-        iPlayerCallback.onTrackUpdate(mCurrentTrack);
+        iPlayerCallback.onTrackUpdate(mCurrentTrack, mCurrentIndex);
         if (!mIPlayerCallbacks.contains(iPlayerCallback)) {
             mIPlayerCallbacks.add(iPlayerCallback);
         }
@@ -225,16 +230,16 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
         //     LogUtil.d(TAG,"title-->" + currentTrack.getTrackTitle());
         //     }
         //第二种写法
+        mCurrentIndex = mPlayerManager.getCurrentIndex();
         if (curModel instanceof Track) {
             Track currentTrack = (Track) curModel;
             mCurrentTrack = currentTrack;
             //LogUtil.d(TAG,"title-->" + currentTrack.getTrackTitle());
             //更新UI
             for (IPlayerCallback iPlayerCallback: mIPlayerCallbacks) {
-                iPlayerCallback.onTrackUpdate(mCurrentTrack);
+                iPlayerCallback.onTrackUpdate(mCurrentTrack, mCurrentIndex);
             }
         }
-
     }
 
     @Override
