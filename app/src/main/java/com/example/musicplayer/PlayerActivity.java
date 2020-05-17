@@ -33,6 +33,8 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
     private SeekBar mDurationBar;
     private int mCurrentProgress = 0;
     private boolean mIsUserTouchProgressBar = false;
+    private ImageView mPlayNextBtn;
+    private ImageView mPlayPreBtn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,6 +100,24 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
                 mPlayerPresenter.seekTo(mCurrentProgress);
             }
         });
+        mPlayPreBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //todo:播放上一个节目
+                if (mPlayerPresenter != null) {
+                    mPlayerPresenter.playPre();
+                }
+            }
+        });
+        mPlayNextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //todo:播放下一个节目
+                if (mPlayerPresenter != null) {
+                    mPlayerPresenter.playNext();
+                }
+            }
+        });
     }
 
         //找到各个控件
@@ -106,6 +126,8 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
         mTotalDuration = this.findViewById(R.id.track_duration);
         mCurrentPosition = this.findViewById(R.id.current_position);
         mDurationBar = this.findViewById(R.id.track_seek_bar);
+        mPlayNextBtn = this.findViewById(R.id.play_next);
+        mPlayPreBtn = this.findViewById(R.id.play_pre);
     }
 
     @Override

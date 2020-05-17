@@ -78,6 +78,7 @@
                 android:src="@mipmap/sort_descending_normal"
                 android:layout_weight="1"/>
             <ImageView
+                android:id="@+id/play_pre"
                 android:layout_width="0dp"
                 android:layout_height="20dp"
                 android:src="@mipmap/previous_normal"
@@ -89,6 +90,7 @@
                 android:src="@mipmap/play_normal"
                 android:layout_weight="1"/>
             <ImageView
+                android:id="@+id/play_next"
                 android:layout_width="0dp"
                 android:layout_height="20dp"
                 android:src="@mipmap/next_normal"
