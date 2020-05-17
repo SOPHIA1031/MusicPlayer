@@ -2,7 +2,6 @@ package com.example.musicplayer;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,11 +16,8 @@ import com.example.musicplayer.adapters.PlayerTrackPagerAdapter;
 import com.example.musicplayer.base.BaseActivity;
 import com.example.musicplayer.interfaces.IPlayerCallback;
 import com.example.musicplayer.presenters.PlayerPresenter;
-import com.example.musicplayer.utils.LogUtil;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -162,21 +158,21 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
     public void onPlayStart() {
         //开始播放，修改ui成暂停的按钮
         if (mControlBtn != null) {
-            mControlBtn.setImageResource(R.mipmap.stop_normal);
+            mControlBtn.setImageResource(R.drawable.selector_player_stop);
         }
     }
 
     @Override
     public void onPlayPause() {
         if (mControlBtn != null) {
-            mControlBtn.setImageResource(R.mipmap.play_normal);
+            mControlBtn.setImageResource(R.drawable.selector_player_play);
         }
     }
 
     @Override
     public void onPlayStop() {
         if (mControlBtn != null) {
-            mControlBtn.setImageResource(R.mipmap.play_normal);
+            mControlBtn.setImageResource(R.drawable.selector_player_play);
         }
     }
 
