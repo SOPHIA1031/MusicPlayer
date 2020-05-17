@@ -9,7 +9,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.viewpager.widget.ViewPager;
 
+import com.example.musicplayer.adapters.PlayerTrackPagerAdapter;
 import com.example.musicplayer.base.BaseActivity;
 import com.example.musicplayer.interfaces.IPlayerCallback;
 import com.example.musicplayer.presenters.PlayerPresenter;
@@ -38,6 +40,8 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
     private ImageView mPlayPreBtn;
     private TextView mTrackTitleTv;
     private String mTrackTitleText;
+    private ViewPager mTrackPageView;
+    private PlayerTrackPagerAdapter mTrackPagerAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,6 +51,8 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
         mPlayerPresenter = PlayerPresenter.getPlayerPresenter();
         mPlayerPresenter.registerViewCallback(this);
         initView();
+        //在界面初始化之后，再去获取数据
+        mPlayerPresenter.getPlayList();
         initEvent();
         startPlay();
     }
@@ -135,6 +141,11 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
         if (!TextUtils.isEmpty(mTrackTitleText)) {
             mTrackTitleTv.setText(mTrackTitleText);
         }
+        mTrackPageView = this.findViewById(R.id.track_pager_view);
+        //创建适配器
+        mTrackPagerAdapter = new PlayerTrackPagerAdapter() ;
+        //设置适配器
+        mTrackPageView.setAdapter(mTrackPagerAdapter);
     }
 
     @Override
@@ -176,7 +187,10 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
 
     @Override
     public void onListLoaded(List<Track> list) {
-
+        //把数据设置到适配器里
+        if (mTrackPagerAdapter != null) {
+            mTrackPagerAdapter.setData(list);
+        }
     }
 
     @Override
@@ -223,11 +237,13 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
     }
 
     @Override
-    public void onTrackTitleUpdate(String title) {
-        this.mTrackTitleText = title;
+    public void onTrackUpdate(Track track) {
+        this.mTrackTitleText = track.getTrackTitle();
         if (mTrackTitleTv != null) {
             //设置当前节目的标题
-            mTrackTitleTv.setText(title);
+            mTrackTitleTv.setText(mTrackTitleText);
         }
+        //当节目改变的时候，我们就获取到当前播放器中播放位置
+        //todo：
     }
 }
