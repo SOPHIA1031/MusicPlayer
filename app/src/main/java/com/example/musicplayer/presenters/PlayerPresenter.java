@@ -25,6 +25,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     private static final String TAG = "PlayerPresenter";
     private final XmPlayerManager mPlayerManager;
     private List<IPlayerCallback> mIPlayerCallbacks = new ArrayList<>();
+    private String mTrackTitle;
 
     private  PlayerPresenter(){
         mPlayerManager = XmPlayerManager.getInstance(BaseApplication.getAppContext());
@@ -50,6 +51,8 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
         if (mPlayerManager != null) {
             mPlayerManager.setPlayList(list, playIndex);
             isPlayListSet = true;
+            Track track = list.get(playIndex);
+            mTrackTitle = track.getTrackTitle();
         }else{
             LogUtil.d(TAG,  "mPlayerManager is null");
         }
@@ -119,6 +122,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
 
     @Override
     public void registerViewCallback(IPlayerCallback iPlayerCallback) {
+        iPlayerCallback.onTrackTitleUpdate(mTrackTitle);
         if (!mIPlayerCallbacks.contains(iPlayerCallback)) {
             mIPlayerCallbacks.add(iPlayerCallback);
         }
@@ -201,8 +205,31 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
     }
 
     @Override
-    public void onSoundSwitch(PlayableModel playableModel, PlayableModel playableModel1) {
+    public void onSoundSwitch(PlayableModel lastModel, PlayableModel curModel) {
         LogUtil.d(TAG,"onSoundSwitch");
+        if (lastModel != null) {
+            LogUtil.d(TAG,"lastModel..." + lastModel.getKind());
+        }
+        LogUtil.d(TAG,"curModel.." + curModel.getKind());
+        //curModel代表当前播放的内容
+        //通过getKind（）来获取它的类型
+        //track表示的是Track的类型
+        //第一种写法,如果类型是track则强制类型转换为Track
+        // if ("track".equals(curModel.getKind())) {
+        //     Track currentTrack = (Track) curModel;
+        //     LogUtil.d(TAG,"title-->" + currentTrack.getTrackTitle());
+        //     }
+        //第二种写法
+        if (curModel instanceof Track) {
+            Track currentTrack = (Track) curModel;
+            mTrackTitle = currentTrack.getTrackTitle();
+            //LogUtil.d(TAG,"title-->" + currentTrack.getTrackTitle());
+            //更新UI
+            for (IPlayerCallback iPlayerCallback: mIPlayerCallbacks) {
+                iPlayerCallback.onTrackTitleUpdate(mTrackTitle);
+            }
+        }
+
     }
 
     @Override

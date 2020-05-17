@@ -30,4 +30,6 @@ public interface IPlayerCallback {
     void onAdLoading();
 //    广告结束
     void inAdFinished();
+//    更新当前节目标题
+    void onTrackTitleUpdate(String title);
 }

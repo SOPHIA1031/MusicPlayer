@@ -2,6 +2,7 @@ package com.example.musicplayer;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -35,6 +36,8 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
     private boolean mIsUserTouchProgressBar = false;
     private ImageView mPlayNextBtn;
     private ImageView mPlayPreBtn;
+    private TextView mTrackTitleTv;
+    private String mTrackTitleText;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -128,6 +131,10 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
         mDurationBar = this.findViewById(R.id.track_seek_bar);
         mPlayNextBtn = this.findViewById(R.id.play_next);
         mPlayPreBtn = this.findViewById(R.id.play_pre);
+        mTrackTitleTv = this.findViewById(R.id.track_title);
+        if (!TextUtils.isEmpty(mTrackTitleText)) {
+            mTrackTitleTv.setText(mTrackTitleText);
+        }
     }
 
     @Override
@@ -213,5 +220,14 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
     @Override
     public void inAdFinished() {
 
+    }
+
+    @Override
+    public void onTrackTitleUpdate(String title) {
+        this.mTrackTitleText = title;
+        if (mTrackTitleTv != null) {
+            //设置当前节目的标题
+            mTrackTitleTv.setText(title);
+        }
     }
 }
