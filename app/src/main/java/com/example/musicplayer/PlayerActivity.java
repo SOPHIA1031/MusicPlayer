@@ -57,7 +57,6 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
         //在界面初始化之后，再去获取数据
         mPlayerPresenter.getPlayList();
         initEvent();
-        startPlay();
     }
 
     @Override
@@ -67,13 +66,6 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
         if (mPlayerPresenter != null) {
             mPlayerPresenter.unRegisterViewCallback(this);
             mPlayerPresenter = null;
-        }
-    }
-
-    // 开始播放
-    private void startPlay() {
-        if (mPlayerPresenter != null) {
-            mPlayerPresenter.play();
         }
     }
 
