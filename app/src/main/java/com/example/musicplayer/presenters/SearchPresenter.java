@@ -69,7 +69,7 @@ public class SearchPresenter implements ISearchPresenter {
                 LogUtil.d(TAG, "errorCode -- > " + errorCode);
                 LogUtil.d(TAG, "errorMsg -- > " + errorMsg);
                 for (ISearchCallback iSearchCallback : mCallback) {
-                    iSearchCallback.onError(errorCode,errorMsg);
+                    iSearchCallback.onError(errorCode, errorMsg);
                 }
             }
         });
@@ -87,6 +87,8 @@ public class SearchPresenter implements ISearchPresenter {
 
     @Override
     public void getHotWord() {
+        //todo：做一个热词缓存
+
         mMusicApi.getHotWords(new IDataCallBack<HotWordList>() {
             @Override
             public void onSuccess(HotWordList hotWordList) {
@@ -110,22 +112,24 @@ public class SearchPresenter implements ISearchPresenter {
 
     @Override
     public void getRecommendWord(String keyword) {
-mMusicApi.getSuggestWord(keyword, new IDataCallBack<SuggestWords>() {
-    @Override
-    public void onSuccess(SuggestWords suggestWords) {
-        if (suggestWords != null) {
-            List<QueryResult> keyWordList=suggestWords.getKeyWordList();
-            LogUtil.d(TAG,"keyWordList -- > "+keyWordList.size());
+        mMusicApi.getSuggestWord(keyword, new IDataCallBack<SuggestWords>() {
+            @Override
+            public void onSuccess(SuggestWords suggestWords) {
+                if (suggestWords != null) {
+                    List<QueryResult> keyWordList = suggestWords.getKeyWordList();
+                    LogUtil.d(TAG, "keyWordList -- > " + keyWordList.size());
+                    for (ISearchCallback iSearchCallback : mCallback) {
+                        iSearchCallback.onRecommendWordLoaded(keyWordList);
+                    }
+                }
+            }
 
-        }
-    }
-
-    @Override
-    public void onError(int errorCode, String errorMsg) {
-        LogUtil.d(TAG, "getRecommendWord errorCode -- > " + errorCode);
-        LogUtil.d(TAG, "getRecommendWord errorMsg -- > " + errorMsg);
-    }
-});
+            @Override
+            public void onError(int errorCode, String errorMsg) {
+                LogUtil.d(TAG, "getRecommendWord errorCode -- > " + errorCode);
+                LogUtil.d(TAG, "getRecommendWord errorMsg -- > " + errorMsg);
+            }
+        });
     }
 
     @Override

@@ -8,5 +8,6 @@
     <color name="second_color">#FA7254</color>
     <color name="black">#000000</color>
     <color name="sub_text_title">#979797</color>
+    <color name="sub_text_title99">#aaefefef</color>
     <color name="play_list_line_color">#ECEEF0</color>
 </resources>
