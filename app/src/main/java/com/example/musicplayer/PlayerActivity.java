@@ -68,10 +68,10 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
+        initView();
         //测试播放
         mPlayerPresenter = PlayerPresenter.getPlayerPresenter();
         mPlayerPresenter.registerViewCallback(this);
-        initView();
         //在界面初始化之后，再去获取数据
         mPlayerPresenter.getPlayList();
         initEvent();
@@ -169,8 +169,6 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
                 //修改播放模式
                 if (mPlayerPresenter != null) {
                     mPlayerPresenter.switchPlayMode(playMode);
-                    mCurrentMode = playMode;
-                    updatePlayModeBtnImg();
                 }
             }
         });
@@ -264,8 +262,10 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
     }
 
     @Override
+    //更新播放模式并且修改UI
     public void onPlayModeChange(XmPlayListControl.PlayMode playMode) {
-
+        mCurrentMode = playMode;
+        updatePlayModeBtnImg();
     }
 
     @Override
