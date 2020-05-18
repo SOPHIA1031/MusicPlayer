@@ -3,6 +3,7 @@ package com.example.musicplayer;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +17,7 @@ import com.example.musicplayer.adapters.PlayerTrackPagerAdapter;
 import com.example.musicplayer.base.BaseActivity;
 import com.example.musicplayer.interfaces.IPlayerCallback;
 import com.example.musicplayer.presenters.PlayerPresenter;
+import com.example.musicplayer.views.SobPopWindow;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 
@@ -63,6 +65,9 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
         splayModeRule.put(PLAY_MODEL_RANDOM, PLAY_MODEL_SINGLE_LOOP);
         splayModeRule.put(PLAY_MODEL_SINGLE_LOOP, PLAY_MODEL_LIST);
     }
+
+    private View mPlayListBtn;
+    private SobPopWindow mSobPopWindow;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -172,6 +177,13 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
                 }
             }
         });
+        mPlayListBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //展示播放列表
+                mSobPopWindow.showAtLocation(v, Gravity.BOTTOM,0,0);
+            }
+        });
     }
 //根据当前的状态模式更新图标
     private void updatePlayModeBtnImg() {
@@ -212,8 +224,11 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
         mTrackPagerAdapter = new PlayerTrackPagerAdapter() ;
         //设置适配器
         mTrackPageView.setAdapter(mTrackPagerAdapter);
-        //切换播放模式得按钮
+        //切换播放模式的按钮
         mPlayModeSwitchBtn = this.findViewById(R.id.player_mode_switch_btn);
+        //播放列表
+        mPlayListBtn = this.findViewById(R.id.player_list);
+        mSobPopWindow = new SobPopWindow();
     }
 
     @Override

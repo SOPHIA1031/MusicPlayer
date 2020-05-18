@@ -97,6 +97,7 @@
                 android:src="@drawable/selector_player_next"
                 android:layout_weight="1"/>
             <ImageView
+                android:id="@+id/player_list"
                 android:layout_width="0dp"
                 android:layout_height="20dp"
                 android:src="@mipmap/player_icon_list_normal"
