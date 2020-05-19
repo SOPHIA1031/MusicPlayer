@@ -14,6 +14,8 @@ import java.util.List;
 
 import com.example.musicplayer.adapters.IndicatorAdapter;
 import com.example.musicplayer.adapters.MainContentAdapter;
+import com.example.musicplayer.api.MusicDBHelper;
+import com.example.musicplayer.presenters.PlayerPresenter;
 import com.example.musicplayer.utils.ImageFactory;
 import com.example.musicplayer.utils.LogUtil;
 import com.hacknife.carouselbanner.Banner;
@@ -41,8 +43,11 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);   //给Activity设置一个layout布局
         initView();
         initEvent();
-//        useBanner();
+        //
+        MusicDBHelper musicDBHelper=new MusicDBHelper(this);
+        musicDBHelper.getWritableDatabase();
     }
+
     private  void initEvent(){
         mIndicatorAdapter.setOnIndicatorTapClickListener(new IndicatorAdapter.OnIndicatorTapClickListener() {
             @Override
