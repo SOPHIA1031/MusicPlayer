@@ -10,4 +10,5 @@
     <color name="sub_text_title">#979797</color>
     <color name="sub_text_title99">#aaefefef</color>
     <color name="play_list_line_color">#ECEEF0</color>
+    <color name="play_list_text_color">#7D828C</color>
 </resources>

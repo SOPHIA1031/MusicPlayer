@@ -1,5 +1,6 @@
 package com.example.musicplayer;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -71,6 +72,9 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
 
     private View mPlayListBtn;
     private SobPopWindow mSobPopWindow;
+    private ValueAnimator mEnterBgAnimator;
+    private ValueAnimator mOutBgAnimator;
+    public final int BG_ANIMATION_DURATION = 500;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,6 +87,31 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
         //在界面初始化之后，再去获取数据
         mPlayerPresenter.getPlayList();
         initEvent();
+        initBgAimation();
+    }
+
+    private void initBgAimation() {
+        mEnterBgAnimator = ValueAnimator.ofFloat(1.0f,0.7f);
+        mEnterBgAnimator.setDuration(BG_ANIMATION_DURATION);
+        mEnterBgAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float value = (float) animation.getAnimatedValue();
+                updateBgAlpha(value);
+
+            }
+        });
+        //退出的
+        mOutBgAnimator = ValueAnimator.ofFloat(0.7f,1.0f);
+        mOutBgAnimator.setDuration(BG_ANIMATION_DURATION);
+        mOutBgAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                    float value = (float) animation.getAnimatedValue();
+                    //处理背景增加透明度
+                    updateBgAlpha(value);
+                }
+        });
     }
 
     @Override
@@ -185,15 +214,25 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
             public void onClick(View v) {
                 //展示播放列表
                 mSobPopWindow.showAtLocation(v, Gravity.BOTTOM,0,0);
-                //处理背景增加透明度
-                updateBgAlpha(0.8f);
+                //修改背景的透明度渐变过程
+                mEnterBgAnimator.start();
             }
         });
         mSobPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                //弹窗消失之后，恢复透明度
-                updateBgAlpha(1.0f);
+                //弹窗消失之后，恢复透明
+                mOutBgAnimator.start();
+            }
+        });
+
+        mSobPopWindow.setPlayListItemClickListener(new SobPopWindow.PlayListItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                //说明播放列表里的ITEM被点击
+                if (mPlayerPresenter != null) {
+                    mPlayerPresenter.playByIndex(position);
+                }
             }
         });
     }
@@ -295,6 +334,10 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
         if (mTrackPagerAdapter != null) {
             mTrackPagerAdapter.setData(list);
         }
+        //数据返回之后，要给播放列表一份
+        if (mSobPopWindow != null) {
+            mSobPopWindow.setListData(list);
+        }
     }
 
     @Override
@@ -354,6 +397,10 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
         if (mTrackPageView != null) {
             //设置为true时，图片切换是平滑的动画
             mTrackPageView.setCurrentItem(playIndex,true);
+        }
+        //当节目改变的时候，同时修改播放列表的当前播放
+        if (mSobPopWindow != null) {
+            mSobPopWindow.setCurrentPlayPosition(playIndex);
         }
     }
 
