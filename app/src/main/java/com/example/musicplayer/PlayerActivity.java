@@ -6,7 +6,10 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -182,9 +185,27 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
             public void onClick(View v) {
                 //展示播放列表
                 mSobPopWindow.showAtLocation(v, Gravity.BOTTOM,0,0);
+                //处理背景增加透明度
+                updateBgAlpha(0.8f);
+            }
+        });
+        mSobPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                //弹窗消失之后，恢复透明度
+                updateBgAlpha(1.0f);
             }
         });
     }
+
+    public void updateBgAlpha(float alpha){
+        Window window = getWindow();
+        WindowManager.LayoutParams attributes = window.getAttributes();
+        attributes.alpha = alpha;
+        window.setAttributes(attributes);
+
+    }
+
 //根据当前的状态模式更新图标
     private void updatePlayModeBtnImg() {
         int resId = R.drawable.selector_play_mode_list_order;
