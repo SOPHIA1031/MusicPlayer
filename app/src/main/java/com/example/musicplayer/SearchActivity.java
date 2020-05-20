@@ -63,6 +63,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Rec
     private RecyclerView mSearchRecommendList;
     private SearchRecommendAdapter mRecommendAdapter;
     private TwinklingRefreshLayout mRefreshLayout;
+    private boolean mNeedSuggestWords=true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,6 +110,9 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Rec
                 @Override
                 public void onItemClick(String keyword) {
                     //LogUtil.d(TAG,"mRecommendAdapter keyword -- > "+keyword);
+                    //不需要相关的联想词
+                    mNeedSuggestWords=false;
+                    //推荐热词的点击
                     switch2Search(keyword);
                 }
             });
@@ -122,6 +126,8 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Rec
         mFlowTextLayout.setClickListener(new FlowTextLayout.ItemClickListener() {
             @Override
             public void onItemClick(String text) {
+                //不需要相关的联想词
+                mNeedSuggestWords=false;
                 switch2Search(text);
             }
         });
@@ -145,6 +151,11 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Rec
             public void onClick(View v) {
                 //去调用搜索的逻辑
                 String keyword = mInputBox.getText().toString().trim();
+                if (TextUtils.isEmpty(keyword)) {
+                    //可以给个提示
+                    Toast.makeText(SearchActivity.this,"搜索关键字不能为空",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (mSearchPresenter != null) {
                     mSearchPresenter.doSearch(keyword);
                     mUILoader.updateStatus(UIloader.UIStatus.LOADING);
@@ -164,8 +175,15 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Rec
                     mDelBtn.setVisibility(View.GONE);
                 } else {
                     mDelBtn.setVisibility(View.VISIBLE);
-                    //触发联想查询
-                    getSuggestWord(s.toString());
+                    //不需要相关的联想词
+                    if (mNeedSuggestWords) {
+                        //触发联想查询
+                        getSuggestWord(s.toString());
+                    }else{
+                        //不需要相关的联想词
+                        mNeedSuggestWords=true;
+                    }
+
                 }
             }
 
@@ -178,6 +196,11 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Rec
     }
 
     private void switch2Search(String text) {
+        if (TextUtils.isEmpty(text)) {
+            //可以给个提示
+            Toast.makeText(this,"搜索关键字不能为空",Toast.LENGTH_SHORT).show();
+            return;
+        }
         //第一步，把热词扔到输入框里
         mInputBox.setText(text);
         mInputBox.setSelection(text.length());
@@ -334,10 +357,10 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Rec
         if (mRefreshLayout != null) {
             mRefreshLayout.finishLoadmore();
         }
-        if(isOkay){
+        if (isOkay) {
             handleSearchResult(result);
-        }else{
-            Toast.makeText(SearchActivity.this,"没有更多内容",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(SearchActivity.this, "没有更多内容", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -376,7 +399,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Rec
     public void onItemClick(int index, Album album) {
         AlbumDetailPresenter.getInstance().setTargetAlbum(album);
         //跳转到详情界面
-        Intent intent =new Intent(this, DetailActivity.class);
+        Intent intent = new Intent(this, DetailActivity.class);
         startActivity(intent);
     }
 }
