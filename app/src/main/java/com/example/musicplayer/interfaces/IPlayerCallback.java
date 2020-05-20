@@ -32,5 +32,5 @@ public interface IPlayerCallback {
     void inAdFinished();
 //    更新当前节目
     void onTrackUpdate(Track track, int playIndex);
-
-}
+    //    通知UI更新列表顺序文字和图标
+    void updateListOrder(boolean isReverse);}
