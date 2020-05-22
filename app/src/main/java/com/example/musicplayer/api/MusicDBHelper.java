@@ -10,7 +10,8 @@ import com.example.musicplayer.utils.Constants;
 import com.example.musicplayer.utils.LogUtil;
 
 public class MusicDBHelper extends SQLiteOpenHelper {
-    private static final String TAG="MusicDBHelper";
+    private static final String TAG = "MusicDBHelper";
+
     public MusicDBHelper(Context context) {
         //name数据库的名字，factory游标工厂，version版本号
         super(context, Constants.DB_NAME, null, Constants.DB_VERSION_CODE);
@@ -18,11 +19,11 @@ public class MusicDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        LogUtil.d(TAG,"onCreate...");
+        LogUtil.d(TAG, "onCreate...");
         //创建数据表
         //订阅相关的字段
         String subTbsql = "create table " + Constants.SUB_TB_NAME + "(" +
-                Constants.SUB_ID + " integer," +
+                Constants.SUB_ID + " integer primary key autoincrement," +
                 Constants.SUB_COVER_URL + " varchar," +
                 Constants.SUB_TITLE + " varchar," +
                 Constants.SUB_DESCRIPTION + " varchar," +

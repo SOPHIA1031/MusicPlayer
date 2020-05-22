@@ -44,8 +44,7 @@ public class MainActivity extends FragmentActivity {
         initView();
         initEvent();
         //
-        MusicDBHelper musicDBHelper=new MusicDBHelper(this);
-        musicDBHelper.getWritableDatabase();
+
     }
 
     private  void initEvent(){
