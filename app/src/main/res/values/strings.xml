@@ -14,4 +14,7 @@
     <string name="order_text">顺序</string>
     <string name="revers_text">逆序</string>
 
+    <string name="playing_tips_text">正在播放</string>
+    <string name="pause_tips_text">已暂停</string>
+
 </resources>
