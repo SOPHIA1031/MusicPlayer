@@ -19,6 +19,7 @@
         android:background="#FCFCFC">
 
         <TextView
+            android:id="@+id/detail_sub_btn"
             android:layout_width="75dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
@@ -26,7 +27,7 @@
             android:layout_marginRight="14dp"
             android:gravity="center"
             android:background="@drawable/shape_sub_bg"
-            android:text="+订阅"
+            android:text="@string/sub_tips_text"
             android:textColor="#ffffff"/>
     </RelativeLayout>
 

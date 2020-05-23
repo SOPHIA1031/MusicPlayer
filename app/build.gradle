@@ -18,8 +18,8 @@ android {
         }
     }
     sourceSets {
-        main{
-            jniLibs.srcDirs= ['libs']
+        main {
+            jniLibs.srcDirs = ['libs']
         }
     }
 
@@ -55,5 +55,7 @@ dependencies {
 
     implementation 'androidx.cardview:cardview:1.0.0'
     //下拉刷新框架
-    implementation'com.lcodecorex:tkrefreshlayout:1.0.7'
+    implementation 'com.lcodecorex:tkrefreshlayout:1.0.7'
+
+    implementation "io.reactivex.rxjava2:rxjava:2.2.10"
 }

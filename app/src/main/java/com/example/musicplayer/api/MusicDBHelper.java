@@ -33,7 +33,6 @@ public class MusicDBHelper extends SQLiteOpenHelper {
                 Constants.SUB_ALBUM_ID + " integer" +
                 ")";
         db.execSQL(subTbsql);
-
     }
 
     @Override

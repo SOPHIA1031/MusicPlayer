@@ -17,6 +17,7 @@ public class SubscriptionDao implements ISubDao {
     private static final SubscriptionDao ourInstance = new SubscriptionDao();
     private static final String TAG = "SubscriptionDao";
     private final MusicDBHelper mMusicDBHelper;
+    private ISubDaoCallback mCallback=null;
 
     private SubscriptionDao() {
         mMusicDBHelper = new MusicDBHelper(BaseApplication.getAppContext());
@@ -27,8 +28,14 @@ public class SubscriptionDao implements ISubDao {
     }
 
     @Override
+    public void setCallback(ISubDaoCallback callback) {
+        this.mCallback=callback;
+    }
+
+    @Override
     public void addAlbum(Album album) {
         SQLiteDatabase db = null;
+        boolean isAddSuccess=false;
         try {
             db = mMusicDBHelper.getWritableDatabase();
             db.beginTransaction();
@@ -44,12 +51,18 @@ public class SubscriptionDao implements ISubDao {
             //插入数据
             db.insert(Constants.SUB_TB_NAME, null, contentValues);
             db.setTransactionSuccessful();
+            isAddSuccess=true;
+
         } catch (Exception e) {
             e.printStackTrace();
+            isAddSuccess=false;
         } finally {
             if (db != null) {
                 db.endTransaction();
                 db.close();
+            }
+            if (mCallback != null) {
+                mCallback.onAddResult(isAddSuccess);
             }
         }
 
@@ -58,18 +71,25 @@ public class SubscriptionDao implements ISubDao {
     @Override
     public void delAlbum(Album album) {
         SQLiteDatabase db = null;
+        boolean isDelSuccess=false;
         try {
             db = mMusicDBHelper.getWritableDatabase();
             db.beginTransaction();
-            int delete = db.delete(Constants.SUB_TB_NAME, Constants.SUB_ALBUM_ID + "=? ", new String[]{album.getId() + ""});
+            int delete = db.delete(Constants.SUB_TB_NAME, Constants.SUB_ALBUM_ID + "=?", new String[]{album.getId() + ""});
             LogUtil.d(TAG, "delete -- > " + delete);
             db.setTransactionSuccessful();
+            isDelSuccess=true;
+
         } catch (Exception e) {
             e.printStackTrace();
+            isDelSuccess=false;
         } finally {
             if (db != null) {
                 db.endTransaction();
                 db.close();
+            }
+            if (mCallback != null) {
+                mCallback.onDelResult(isDelSuccess);
             }
         }
     }
@@ -80,6 +100,7 @@ public class SubscriptionDao implements ISubDao {
         List<Album> result=new ArrayList<>();
         try {
             db = mMusicDBHelper.getReadableDatabase();
+            db.beginTransaction();
             Cursor query = db.query(Constants.SUB_TB_NAME, null, null, null, null, null, null);
             //封装数据
             while (query.moveToNext()) {
@@ -110,7 +131,9 @@ public class SubscriptionDao implements ISubDao {
                 result.add(album);
             }
             //把数据通知出去
-            //todo:
+           if(mCallback!=null){
+               mCallback.onSubListLoaded(result);
+           }
             query.close();
             db.setTransactionSuccessful();
         } catch (Exception e) {

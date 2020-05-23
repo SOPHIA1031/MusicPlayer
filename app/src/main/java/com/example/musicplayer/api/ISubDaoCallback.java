@@ -1,22 +1,21 @@
-package com.example.musicplayer.interfaces;
+package com.example.musicplayer.api;
 
-import com.example.musicplayer.presenters.AlbumDetailPresenter;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 
 import java.util.List;
 
-public interface ISubscriptionCallback {
+public interface ISubDaoCallback {
     /**
-     * 调用添加的时候，去通知UI结果
+     * 添加的结果回调方法
      * @param isSuccess
      */
     void onAddResult(boolean isSuccess);
 
     /**
-     * 删除订阅的回调方法
+     * 删除结果回调方法
      * @param isSuccess
      */
-    void onDeleteResult(boolean isSuccess);
+    void onDelResult(boolean isSuccess);
 
     /**
      * 加载的结果
