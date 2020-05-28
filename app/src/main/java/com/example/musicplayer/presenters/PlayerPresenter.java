@@ -217,6 +217,14 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
         }
     }
 
+    //推荐页默认播放第一张专辑第一首
+    @Override
+    public void playByAlbumId(long id) {
+        //1.获取专辑的列表
+        //2.把专辑设置给播放器
+        //3.播放
+    }
+
 
     @Override
     public void registerViewCallback(IPlayerCallback iPlayerCallback) {
@@ -370,4 +378,6 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
         return false;
     }
 // ============播放器相关回调方法 end ============
+
+
 }

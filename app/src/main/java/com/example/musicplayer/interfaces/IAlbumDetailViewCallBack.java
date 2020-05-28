@@ -12,4 +12,8 @@ public interface IAlbumDetailViewCallBack {
     void onAlbumLoaded(Album album);
     //网络错误
     void onNetError(int errCode,String errMsg);
+    // 加载更多的结果
+    void onLoadMoreFinish(int size);
+    // 加载刷新结果
+    void onRefreshFinish(int size);
 }

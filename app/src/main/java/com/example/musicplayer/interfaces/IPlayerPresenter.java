@@ -28,5 +28,6 @@ public interface IPlayerPresenter extends IBasePresenter<IPlayerCallback> {
     boolean isPlay();
 //把播放器列表内容翻转
     void reversePlayList();
-
+    //根据专辑id播放
+    void playByAlbumId(long id);
 }

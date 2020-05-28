@@ -49,10 +49,13 @@
             android:id="@+id/play_control_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="继续播放"
+            android:text="点击播放"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/detail_play_icon"
-            android:layout_marginLeft="2dp"/>
+            android:layout_marginLeft="2dp"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:marqueeRepeatLimit="marquee_forever"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -3,6 +3,7 @@ package com.example.musicplayer;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     private ISubscriptionPresenter mSubscriptionPresenter;
     private Album mCurrentAlbum;
     private boolean mIsLoaderMore = false;
+    private String trackTitle=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,7 +180,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         //播放控制的图标
         mPlayControlBtn = this.findViewById(R.id.detail_play_icon);
         mPlayControlTips = this.findViewById(R.id.play_control_tv);
-        //
+        mPlayControlTips.setSelected(true);
         mSubBtn = this.findViewById(R.id.detail_sub_btn);
 
     }
@@ -305,10 +307,34 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         uiLoader.updateStatus(UIloader.UIStatus.NETWORK_ERROR);
     }
 
+    //界面层实现接口里的方法
+    @Override
+    public void onLoadMoreFinish(int size) {
+        if(size>0){
+          Toast.makeText(this,"成功加载"+size+"条",Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(this,"没有更多了",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRefreshFinish(int size) {
+
+    }
+
     private void updatePlaySate(boolean play) {
         if (mPlayControlBtn != null && mPlayControlTips != null) {
             mPlayControlBtn.setImageResource(play ? R.drawable.selector_play_control_pause : R.drawable.selector_play_control_play);
-            mPlayControlTips.setText(play ? R.string.playing_tips_text : R.string.pause_tips_text);
+            if(!play){
+                mPlayControlTips.setText(R.string.pause_tips_text); //显示“已暂停”
+            }
+            else {
+                if (!TextUtils.isEmpty(trackTitle))
+                mPlayControlTips.setText(trackTitle);
+            }
+
+            //mPlayControlTips.setText(play ? R.string.playing_tips_text : R.string.pause_tips_text);
         }
     }
 
@@ -372,7 +398,13 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 
     @Override
     public void onTrackUpdate(Track track, int playIndex) {
-
+        //更新播放那里的歌曲标题
+        if(track!=null) {
+            trackTitle = track.getTrackTitle();
+            if (!TextUtils.isEmpty(trackTitle) && mPlayControlTips != null) {
+                mPlayControlTips.setText(trackTitle);
+            }
+        }
     }
 
     @Override

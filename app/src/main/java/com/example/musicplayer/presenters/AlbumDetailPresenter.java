@@ -106,10 +106,12 @@ public class AlbumDetailPresenter implements IAlbumDetailPresenter {
                     List<Track> tracks =trackList.getTracks();
                     if (isMore){
                         //上拉加载，结果放到前面
-                        mTracks.addAll(mTracks.size()-1,tracks);
+                        mTracks.addAll(tracks);
+                        int size=tracks.size();
+                        handlerLoadMoreResult(size);
                     }else {
                         //下拉结果在后面
-                        mTracks.addAll(tracks);
+                        mTracks.addAll(0,tracks);
                     }
 
                     handlerAlbumDetailResult(mTracks);
@@ -126,5 +128,12 @@ public class AlbumDetailPresenter implements IAlbumDetailPresenter {
                 handlerError(errCode,msg);  //错误时显示网络错误
             }
         },mCurrentPageIndex,mCurrentAlbumId);
+    }
+
+    // 处理加载更多的接口
+    private void handlerLoadMoreResult(int size) {
+        for (IAlbumDetailViewCallBack callback : mCallbacks) {
+            callback.onLoadMoreFinish(size);
+        }
     }
 }
