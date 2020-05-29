@@ -19,6 +19,7 @@ import com.example.musicplayer.adapters.MainContentAdapter;
 import com.example.musicplayer.api.MusicDBHelper;
 import com.example.musicplayer.interfaces.IPlayerCallback;
 import com.example.musicplayer.presenters.PlayerPresenter;
+import com.example.musicplayer.presenters.RecommendPresenter;
 import com.example.musicplayer.utils.ImageFactory;
 import com.example.musicplayer.utils.LogUtil;
 import com.hacknife.carouselbanner.Banner;
@@ -26,6 +27,7 @@ import com.hacknife.carouselbanner.CoolCarouselBanner;
 import com.hacknife.carouselbanner.interfaces.OnCarouselItemChangeListener;
 import com.hacknife.carouselbanner.interfaces.OnCarouselItemClickListener;
 import com.squareup.picasso.Picasso;
+import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 //import com.youth.banner.Banner;
@@ -46,6 +48,7 @@ public class MainActivity extends FragmentActivity implements IPlayerCallback {
     private TextView mMainSubTitle;
     private ImageView mPlayControl;
     private PlayerPresenter mPlayerPresenter;
+    private View mPlayControlItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,13 +80,33 @@ public class MainActivity extends FragmentActivity implements IPlayerCallback {
         mPlayControl.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                if (mPlayerPresenter!=null){
-                    if (mPlayerPresenter.isPlay()){
-                        mPlayerPresenter.pause();
-                    }else {
-                        mPlayerPresenter.play();
+                boolean hasPlayList=mPlayerPresenter.hasPlayList();
+                if(!hasPlayList){
+                    //没有设置过播放列表就播放第一首
+                    playFirstRecommend();
+                }
+                else {
+                    if (mPlayerPresenter!=null){
+                        if (mPlayerPresenter.isPlay()){
+                            mPlayerPresenter.pause();
+                        }else {
+                            mPlayerPresenter.play();
+                        }
                     }
                 }
+
+            }
+        });
+        //推荐页跳转到播放器页面，设置点击事件
+        mPlayControlItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean hasPlayList=mPlayerPresenter.hasPlayList();
+                if(!hasPlayList){
+                    //没有设置过播放列表就播放第一首
+                    playFirstRecommend();
+                }
+                startActivity(new Intent(MainActivity.this,PlayerActivity.class));
             }
         });
         mSearchBtn.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +117,17 @@ public class MainActivity extends FragmentActivity implements IPlayerCallback {
             }
         });
     }
+
+    //播放第一个推荐内容
+    private void playFirstRecommend() {
+        List<Album> currentRecommend=RecommendPresenter.getInstance().getCurrentRecommend();
+        if (currentRecommend!=null&&currentRecommend.size()>0){
+            Album album=currentRecommend.get(0);
+            long albumId=album.getId();
+            mPlayerPresenter.playByAlbumId(albumId);
+        }
+    }
+
     //最上面的导航条
     private void initView(){
         mMagicIndicator = this.findViewById(R.id.main_indicator);
@@ -119,7 +153,7 @@ public class MainActivity extends FragmentActivity implements IPlayerCallback {
         mMainHeadTitle.setSelected(true);
         mMainSubTitle=this.findViewById(R.id.main_sub_title);
         mPlayControl=this.findViewById(R.id.main_play_control);
-
+        mPlayControlItem=this.findViewById(R.id.play_control);
         //搜索
         mSearchBtn=this.findViewById(R.id.search_btn);
     }

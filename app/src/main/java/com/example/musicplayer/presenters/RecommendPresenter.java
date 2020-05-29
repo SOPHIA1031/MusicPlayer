@@ -25,6 +25,7 @@ public class RecommendPresenter implements IRecommendPresenter {
 
     private RecommendPresenter(){ }
     private static RecommendPresenter sInstance =null;
+    private List<Album> mCurrentRecommend=null;
 
     //获取单例对象，懒汉型
     public static RecommendPresenter getInstance(){
@@ -38,6 +39,9 @@ public class RecommendPresenter implements IRecommendPresenter {
         return sInstance;
     }
 
+    public List<Album> getCurrentRecommend(){
+        return mCurrentRecommend;
+    }
     @Override
     public void getRecommendList() {
         updateLoading();
@@ -82,7 +86,9 @@ public class RecommendPresenter implements IRecommendPresenter {
                 for (IRecommendViewCallback callback : mCallbacks) {
                     callback.onRecommendListLoaded(albumList);
                 }
+                this.mCurrentRecommend=albumList;
             }
+
         }
     }
 
