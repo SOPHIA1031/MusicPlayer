@@ -69,7 +69,7 @@
                 android:id="@+id/main_head_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="我是大标题"
+                android:text="随便听一听吧"
                 android:textSize="18sp"
                 android:textColor="#9d9d9d"
                 android:ellipsize="marquee"
@@ -80,7 +80,7 @@
                 android:id="@+id/main_sub_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="我是作者"
+                android:text=" "
                 android:textSize="14sp"
                 android:textColor="#9d9d9d"/>
 

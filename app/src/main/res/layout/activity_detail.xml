@@ -55,7 +55,8 @@
             android:layout_marginLeft="2dp"
             android:ellipsize="marquee"
             android:singleLine="true"
-            android:marqueeRepeatLimit="marquee_forever"/>
+            android:marqueeRepeatLimit="marquee_forever"
+            android:layout_marginRight="50dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

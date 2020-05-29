@@ -29,6 +29,7 @@ import com.ximalaya.ting.android.opensdk.model.album.Album;
 import java.util.ArrayList;
 import java.util.List;
 
+// View层
 public class RecommendFragment extends BaseFragment implements IRecommendViewCallback, UIloader.onRetryClickListener, RecomendListAdapter.onRecItemClickListener {
     private static final String TAG="RecommendFragment";
     private View mRootView;

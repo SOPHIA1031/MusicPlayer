@@ -80,6 +80,7 @@ public class PlayerPresenter implements IPlayerPresenter, IXmAdsStatusListener, 
             mPlayerManager.setPlayList(list, playIndex);
             isPlayListSet = true;
             mCurrentTrack = list.get(playIndex);
+            LogUtil.d(TAG,  "mPlayerManager "+mCurrentTrack);
             mCurrentIndex = playIndex;
         }else{
             LogUtil.d(TAG,  "mPlayerManager is null");

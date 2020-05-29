@@ -7,16 +7,21 @@
     android:layout_height="match_parent">
 
     <!--    轮播图-->
-    <com.hacknife.carouselbanner.CoolCarouselBanner
-        android:id="@+id/banner"
+    <LinearLayout
+        android:id="@+id/banner_contain"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        app:autoPlaying="true"
-        app:indicatorGravity="left"
-        app:indicatorSelectedSrc="#d6c2c2"
-        app:indicatorUnselectedSrc="#df0000"
-        app:orientation="horizontal"
-        app:speedPerPixelMillisecond="0.8" />
+        android:layout_height="160dp">
+        <com.hacknife.carouselbanner.CoolCarouselBanner
+            android:id="@+id/banner"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            app:autoPlaying="true"
+            app:indicatorGravity="center"
+            app:indicatorSelectedSrc="#d6c2c2"
+            app:indicatorUnselectedSrc="#df0000"
+            app:orientation="horizontal"
+            app:speedPerPixelMillisecond="0.8" />
+    </LinearLayout>
 
 <!--    推荐数据列表-->
     <androidx.recyclerview.widget.RecyclerView
@@ -24,7 +29,7 @@
         android:id="@+id/recommend_list"
         android:layout_height="match_parent"
         android:background="#F4F4F4"
-        android:layout_below="@+id/banner">
+        android:layout_below="@+id/banner_contain">
 
     </androidx.recyclerview.widget.RecyclerView>
 </RelativeLayout>
