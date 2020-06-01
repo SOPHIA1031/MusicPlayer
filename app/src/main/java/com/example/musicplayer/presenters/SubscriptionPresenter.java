@@ -5,6 +5,7 @@ import com.example.musicplayer.api.SubscriptionDao;
 import com.example.musicplayer.base.BaseApplication;
 import com.example.musicplayer.interfaces.ISubscriptionCallback;
 import com.example.musicplayer.interfaces.ISubscriptionPresenter;
+import com.example.musicplayer.utils.Constants;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 
 import java.util.ArrayList;
@@ -27,16 +28,16 @@ public class SubscriptionPresenter implements ISubscriptionPresenter, ISubDaoCal
     private SubscriptionPresenter() {
         mSubscriptionDao = SubscriptionDao.getInstance();
         mSubscriptionDao.setCallback(this);
-        listSubscriptions();
 
     }
 
-    public static SubscriptionPresenter getInstance() {
+    public static ISubscriptionPresenter getInstance() {
         if (sInstance == null) {
             synchronized (SubscriptionPresenter.class) {
                 sInstance = new SubscriptionPresenter();
             }
         }
+
         return sInstance;
     }
 
@@ -54,6 +55,14 @@ public class SubscriptionPresenter implements ISubscriptionPresenter, ISubDaoCal
 
     @Override
     public void addSubscription(Album album) {
+        //判断当前的订阅数量，不能超过100个
+        if (mData.size() >= Constants.MAX_SUB_COUNT) {
+            //给出提示
+            for (ISubscriptionCallback callback : mCallbacks) {
+                callback.onSubFull();
+            }
+            return;
+        }
         Observable.create(new ObservableOnSubscribe<Object>() {
             @Override
             public void subscribe(ObservableEmitter<Object> emitter) throws Exception {
@@ -86,9 +95,9 @@ public class SubscriptionPresenter implements ISubscriptionPresenter, ISubDaoCal
 
     @Override
     public boolean isSub(Album album) {
-        Album result=mData.get(album.getId());
+        Album result = mData.get(album.getId());
         //不为空，表示已经订阅
-        return result!=null;
+        return result != null;
     }
 
     @Override
@@ -133,6 +142,7 @@ public class SubscriptionPresenter implements ISubscriptionPresenter, ISubDaoCal
     @Override
     public void onSubListLoaded(List<Album> result) {
         //加载数据的回调
+        mData.clear();
         for (Album album : result) {
             mData.put(album.getId(), album);
         }

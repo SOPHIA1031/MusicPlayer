@@ -28,6 +28,7 @@ import com.example.musicplayer.interfaces.ISubscriptionPresenter;
 import com.example.musicplayer.presenters.AlbumDetailPresenter;
 import com.example.musicplayer.presenters.PlayerPresenter;
 import com.example.musicplayer.presenters.SubscriptionPresenter;
+import com.example.musicplayer.utils.Constants;
 import com.example.musicplayer.utils.GlideBlurformation;
 import com.example.musicplayer.views.UIloader;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
@@ -38,6 +39,8 @@ import com.ximalaya.ting.android.opensdk.model.track.Track;
 import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 
 import java.util.List;
+
+import static android.widget.Toast.LENGTH_SHORT;
 
 public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallBack, DetailListAdapter.ItemClickListener, IPlayerCallback, ISubscriptionCallback {
     private final static int DEFAULT_PLAY_INDEX = 0;
@@ -60,7 +63,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     private ISubscriptionPresenter mSubscriptionPresenter;
     private Album mCurrentAlbum;
     private boolean mIsLoaderMore = false;
-    private String trackTitle=null;
+    private String trackTitle = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +98,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         mPlayerPresenter.registerViewCallback(this);
         //订阅相关的presenter.
         mSubscriptionPresenter = SubscriptionPresenter.getInstance();
+        mSubscriptionPresenter.getSubscriptionList();
         mSubscriptionPresenter.registerViewCallback(this);
     }
 
@@ -212,7 +216,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
                 BaseApplication.getHandler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(DetailActivity.this, "刷新成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DetailActivity.this, "刷新成功", LENGTH_SHORT).show();
                         mRefreshLayout.finishRefreshing();
                     }
                 }, 2000);
@@ -310,11 +314,10 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     //界面层实现接口里的方法
     @Override
     public void onLoadMoreFinish(int size) {
-        if(size>0){
-          Toast.makeText(this,"成功加载"+size+"条",Toast.LENGTH_SHORT).show();
-        }
-        else {
-            Toast.makeText(this,"没有更多了",Toast.LENGTH_SHORT).show();
+        if (size > 0) {
+            Toast.makeText(this, "成功加载" + size + "条", LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "没有更多了", LENGTH_SHORT).show();
         }
     }
 
@@ -326,12 +329,11 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     private void updatePlaySate(boolean play) {
         if (mPlayControlBtn != null && mPlayControlTips != null) {
             mPlayControlBtn.setImageResource(play ? R.drawable.selector_play_control_pause : R.drawable.selector_play_control_play);
-            if(!play){
+            if (!play) {
                 mPlayControlTips.setText(R.string.pause_tips_text); //显示“已暂停”
-            }
-            else {
+            } else {
                 if (!TextUtils.isEmpty(trackTitle))
-                mPlayControlTips.setText(trackTitle);
+                    mPlayControlTips.setText(trackTitle);
             }
 
             //mPlayControlTips.setText(play ? R.string.playing_tips_text : R.string.pause_tips_text);
@@ -399,7 +401,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
     @Override
     public void onTrackUpdate(Track track, int playIndex) {
         //更新播放那里的歌曲标题
-        if(track!=null) {
+        if (track != null) {
             trackTitle = track.getTrackTitle();
             if (!TextUtils.isEmpty(trackTitle) && mPlayControlTips != null) {
                 mPlayControlTips.setText(trackTitle);
@@ -420,7 +422,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         }
         //给个toast
         String tipsText = isSuccess ? "订阅成功" : "订阅失败";
-        Toast.makeText(this, tipsText, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, tipsText, LENGTH_SHORT).show();
     }
 
     @Override
@@ -431,11 +433,19 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
         }
         //给个toast
         String tipsText = isSuccess ? "删除成功" : "删除失败";
-        Toast.makeText(this, tipsText, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, tipsText, LENGTH_SHORT).show();
     }
 
     @Override
     public void onSubListLoaded(List<Album> result) {
         //在这个界面不需要处理
     }
+
+    @Override
+    public void onSubFull() {
+        //处理一个即可
+        Toast.makeText(this, "订阅数量不能超过"+ Constants.MAX_SUB_COUNT, Toast.LENGTH_SHORT).show();
+    }
 }
+
+
