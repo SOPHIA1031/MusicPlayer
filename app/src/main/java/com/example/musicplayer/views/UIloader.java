@@ -88,11 +88,11 @@ public abstract class UIloader extends FrameLayout {
         mEmptyView.setVisibility(mCurrentStatus==UIStatus.EMPTY?VISIBLE:GONE);
     }
 
-    private View getEmptyView() {
+    protected View getEmptyView() {
         return LayoutInflater.from(getContext()).inflate(R.layout.fragment_empty_view,this,false);
     }
 
-    private View getNetErrView() {
+    protected View getNetErrView() {
         View netErrView=LayoutInflater.from(getContext()).inflate(R.layout.fragment_net_err_view,this,false);
         netErrView.findViewById(R.id.net_err_icon).setOnClickListener(new OnClickListener() {
             @Override
@@ -106,7 +106,7 @@ public abstract class UIloader extends FrameLayout {
         return netErrView;
     }
 
-    private View getLoadingView() {
+    protected View getLoadingView() {
         return LayoutInflater.from(getContext()).inflate(R.layout.fragment_loading_view,this,false);
     }
     protected  abstract View getSuccessView(ViewGroup container);
