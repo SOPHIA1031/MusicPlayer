@@ -33,6 +33,7 @@ public class Constants {
     public static final String HISTORY_UPDATE_TIME="historyUpdateTime";
     public static final String HISTORY_TRACK_ID="historyTrackId";
     public static final String HISTORY_COVER="historyCover";
+    public static final String HISTORY_AUTHOR="historyAuthor";
 
     public static final int MAX_HISTORY_COUNT=100;
 

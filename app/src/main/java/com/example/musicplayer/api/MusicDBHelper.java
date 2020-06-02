@@ -41,7 +41,9 @@ public class MusicDBHelper extends SQLiteOpenHelper {
                 Constants.HISTORY_COVER + " varchar," +
                 Constants.HISTORY_PLAY_COUNT + " integer," +
                 Constants.HISTORY_DURATION+ " integer," +
+                Constants.HISTORY_AUTHOR+ " varchar," +
                 Constants.HISTORY_UPDATE_TIME + " integer" +
+
                 ")";
         db.execSQL(historyTbSql);
     }

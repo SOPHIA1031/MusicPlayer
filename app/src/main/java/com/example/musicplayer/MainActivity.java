@@ -72,7 +72,7 @@ public class MainActivity extends FragmentActivity implements IPlayerCallback {
             public void onTabClick(int index) {
                 LogUtil.d(TAG,"click index is"+index);
                 if (mContentPager!=null){
-                    mContentPager.setCurrentItem(index);   //点击导航条时，跳转到对应的页面（封装的方法）
+                    mContentPager.setCurrentItem(index,false);   //点击导航条时，跳转到对应的页面（封装的方法）
                 }
             }
         });

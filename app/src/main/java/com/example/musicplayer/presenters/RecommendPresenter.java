@@ -20,6 +20,7 @@ import java.util.Map;
 
 public class RecommendPresenter implements IRecommendPresenter {
     //实现类
+    private List<Album> mRecommendList;
     private static final String TAG="RecommendPresenter：";
     private List<IRecommendViewCallback> mCallbacks =new ArrayList<>();
 
@@ -44,6 +45,10 @@ public class RecommendPresenter implements IRecommendPresenter {
     }
     @Override
     public void getRecommendList() {
+        if (mRecommendList != null&&mRecommendList.size()>0) {
+            handlerRecommendResult(mRecommendList);
+            return;
+        }
         updateLoading();
         MusicAPI musicAPI=MusicAPI.getInstance();
         musicAPI.getRecommendList(new IDataCallBack<GussLikeAlbumList>() {
@@ -51,10 +56,10 @@ public class RecommendPresenter implements IRecommendPresenter {
             @Override
             public void onSuccess(@Nullable GussLikeAlbumList gussLikeAlbumList) {
                 if (gussLikeAlbumList != null) {
-                    List<Album> albumList = gussLikeAlbumList.getAlbumList();
+                    mRecommendList = gussLikeAlbumList.getAlbumList();
                     //upRecommendUI(albumList);
                     // 获取到数据后更新UI
-                    handlerRecommendResult(albumList);
+                    handlerRecommendResult(mRecommendList);
                 }
             }
 
