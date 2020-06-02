@@ -33,6 +33,17 @@ public class MusicDBHelper extends SQLiteOpenHelper {
                 Constants.SUB_ALBUM_ID + " integer" +
                 ")";
         db.execSQL(subTbsql);
+        //创建历史记录表
+        String historyTbSql="create table " + Constants.HISTORY_TB_NAME + "(" +
+                Constants.HISTORY_ID + " integer primary key autoincrement," +
+                Constants.HISTORY_TRACK_ID + " integer," +
+                Constants.HISTORY_TITLE + " varchar," +
+                Constants.HISTORY_COVER + " varchar," +
+                Constants.HISTORY_PLAY_COUNT + " integer," +
+                Constants.HISTORY_DURATION+ " integer," +
+                Constants.HISTORY_UPDATE_TIME + " integer" +
+                ")";
+        db.execSQL(historyTbSql);
     }
 
     @Override
