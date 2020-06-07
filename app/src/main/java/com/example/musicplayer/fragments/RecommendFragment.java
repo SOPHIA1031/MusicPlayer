@@ -100,9 +100,9 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
         List<String> list = new ArrayList<>();
         Banner.init(new ImageFactory());
         list.add("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3893798113,2002765214&fm=26&gp=0.jpg");
-        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589442267334&di=b77d8b8eceb876aa2ffdf63d913793a7&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F784e942957c0d5eb85d45047dbb0f2bb055e3d30aaba-vlms9j_fw658");
+        list.add("https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3568579721,2397111734&fm=26&gp=0.jpg");
         list.add("https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3960632197,3985528648&fm=15&gp=0.jpg");
-        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589442267334&di=b40a96d6f3d07347566380148c91d9a2&imgtype=0&src=http%3A%2F%2Fhbimg.huabanimg.com%2F21ed315d050a43835caf4f503aa43fee5adde0c920ec2-zFUbgw_fw658");
+        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1591247441041&di=6e97172be435f4de037400cd18cd3542&imgtype=0&src=http%3A%2F%2Fhbimg.huabanimg.com%2F59c74fe83f5a77028148c4846c82679b093a5dc21ec2f-LrmZUD_fw658");
         list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1589442267333&di=e58748229ef60811e4c92450ce453899&imgtype=0&src=http%3A%2F%2Fhbimg.huabanimg.com%2F1d28c650199db55aa9602a511803e7377388b956eaf2-LLKbqs_fw658");
         list.add("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3012112261,1934803070&fm=26&gp=0.jpg");
 
