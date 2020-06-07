@@ -64,6 +64,8 @@ public class SubscriptionFragment extends BaseFragment implements ISubscriptionC
             }
             rootView.addView(mUiLoader);
         }
+
+
         return rootView;
     }
 
@@ -170,6 +172,7 @@ public class SubscriptionFragment extends BaseFragment implements ISubscriptionC
         if (mCurrentClickAlbum != null&&mSubscriptionPresenter!=null){
             mSubscriptionPresenter.deleteSubscription(mCurrentClickAlbum);
         }
+
 
     }
 

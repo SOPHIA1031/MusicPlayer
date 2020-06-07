@@ -31,4 +31,6 @@ public interface ISubscriptionPresenter extends IBasePresenter<ISubscriptionCall
      */
     boolean isSub(Album album);
 
+
+
 }

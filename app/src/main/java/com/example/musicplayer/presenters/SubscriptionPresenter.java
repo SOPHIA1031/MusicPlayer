@@ -41,7 +41,7 @@ public class SubscriptionPresenter implements ISubscriptionPresenter, ISubDaoCal
         return sInstance;
     }
 
-    private void listSubscriptions() {
+    public void listSubscriptions() {
         Observable.create(new ObservableOnSubscribe<Object>() {
             @Override
             public void subscribe(ObservableEmitter<Object> emitter) throws Exception {
@@ -114,6 +114,7 @@ public class SubscriptionPresenter implements ISubscriptionPresenter, ISubDaoCal
 
     @Override
     public void onAddResult(boolean isSuccess) {
+        listSubscriptions();
         //添加结果的回调
         BaseApplication.getHandler().post(new Runnable() {
             @Override
@@ -127,6 +128,7 @@ public class SubscriptionPresenter implements ISubscriptionPresenter, ISubDaoCal
 
     @Override
     public void onDelResult(boolean isSuccess) {
+        listSubscriptions();
         //删除订阅的回调
         BaseApplication.getHandler().post(new Runnable() {
             @Override
